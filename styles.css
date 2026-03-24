@@ -32,10 +32,12 @@ body {
   box-sizing: border-box;
   padding: 1rem;
   max-width: 600px;
+  min-width: 400px;
   min-height: 100vh;
   background: var(--game-background);
   border: solid 5px var(--game-border);
   border-radius: 5px;
+  box-shadow: 0px 0px 10px 5px var(--shadow);
 }
 
 h1, h2 {
@@ -48,42 +50,59 @@ h1, h2 {
   gap: 10px;
 }
 
-#habitats button {
+#habitats a {
   box-sizing: border-box;
-  min-width: 100px; /**/
-  min-height: 100px; /**/
+  min-width: 100px;
+  min-height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-weight: bold;
   font-size: 16px;
+  text-decoration: none;
+  color: var(--text);
   border-style: solid;
   border-width: 5px;
   border-radius: 10px;
   box-shadow: 0px 0px 10px 5px var(--shadow);
 }
 
-button:hover {
+a:hover {
+  color: var(--text);
   filter: brightness(0.85);
 }
 
-button:active {
+a:active {
+  color: var(--text);
   transform: scale(0.95);
 }
 
-#swamp {
+.swamp {
   background: var(--main-swamp);
   border-color: var(--border-swamp);
 }
 
-#mountain {
+.mountain {
   background: var(--main-mountain);
   border-color: var(--border-mountain);
 }
 
-#desert {
+.desert {
   background: var(--main-desert);
   border-color: var(--border-desert);
 }
 
-#forest {
+.forest {
   background: var(--main-forest);
   border-color: var(--border-forest);
+}
+
+#game {
+  padding: 0;
+}
+
+#habitat-title {
+  margin: 0;
+  padding: 0 1rem;
+  line-height: 5rem;
 }

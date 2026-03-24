@@ -14,69 +14,12 @@
     <p>You'll start with a small population and can set what jobs workers can do each round. Any citizens of working age that are not assigned to a job have a chance to produce offspring. Children have a chance to grow into adults the more old people there are.</p>
     <p>People will die of old age, sickness or starvation. Build houses to keep your citizens healthy.</p>
 
-
     <div id="habitats">
-      <button 
-        id="swamp" 
-        name="Swamp" 
-
-        data-hunt="4"
-        data-forage="6"
-        data-wood="8"
-        data-stone="1"
-        data-grow="6"
-        data-oldage="7"
-        data-fertility="6"
-        data-sickness="6"
-
-        onclick="setHabitat(swamp)">Swamp</button>
-
-      <button 
-        id="mountain" 
-        name="Mountain" 
-
-        data-hunt="5"
-        data-forage="3"
-        data-wood="5"
-        data-stone="8"
-        data-grow="5"
-        data-oldage="6"
-        data-fertility="5"
-        data-sickness="2"
-
-        onclick="setHabitat(mountain)">Mountian</button>
-
-      <button 
-        id="desert" 
-        name="Desert" 
-
-        data-hunt="3"
-        data-forage="3"
-        data-wood="2"
-        data-stone="5"
-        data-grow="3"
-        data-oldage="4"
-        data-fertility="3"
-        data-sickness="1"
-
-        onclick="setHabitat(desert)">Desert</button>
-
-      <button 
-        id="forest" 
-        name="Forest" 
-
-        data-hunt="6"
-        data-forage="8"
-        data-wood="8"
-        data-stone="1"
-        data-grow="4"
-        data-oldage="5"
-        data-fertility="4"
-        data-sickness="4"
-
-        onclick="setHabitat(forest)">Forest</button>
+      <a class="swamp" href="game.html?name='Swamp'&hunt=4&forage=6&wood=8&stone=1&grow=6&oldage=7&fertility=6&sickness=6"><span>Swamp</span></a>
+      <a class="mountain" href="game.html?name='Mountain'&hunt=5&forage=3&wood=5&stone=8&grow=5&oldage=6&fertility=5&sickness=2"><span>Mountain</span></a>
+      <a class="desert" href="game.html?name='Desert'&hunt=3&forage=3&wood=2&stone=5&grow=3&oldage=4&fertility=3&sickness=1"><span>Desert</span></a>
+      <a class="forest" href="game.html?name='Forest'&hunt=6&forage=8&wood=8&stone=1&grow=4&oldage=5&fertility=4&sickness=4"><span>Forest</span></a>
     </div>
-
-    <script src="index.js"></script>
+    
   </body>
 </html>

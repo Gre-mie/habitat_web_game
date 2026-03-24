@@ -1,31 +1,13 @@
-let habitat = {}
+let fullurl = window.location.href
+let habitat = new URLSearchParams(new URL(fullurl).search)
 
-function setHabitat(el) {
+console.log(`habitat:`)
 
-  console.log(el)
-  console.log(el.dataset)
+for (const [key, value] of habitat) {
+  console.log(`${key}: ${value}`)
+  // TODO: may need to put these in an object (hard coded)
+  // use parseInt to convert string to num
 
-  let t = "-"
-
-
-  console.log(`habitat: ${el.name}
-chance modifyers:
-- hunt: ${el.dataset.hunt}
-- forage: ${el.dataset.forage}
-- wood: ${el.dataset.wood}
-- stone: ${el.dataset.stone}
-
-- fertility: ${el.dataset.grow}
-- sickness: ${el.dataset.oldage}
-
-- grow: ${el.dataset.fertility}
-- oldage: ${el.dataset.sickness}
-`)
-
-  //window.location.href = "./game.html"
- // let board = document.getElementById("game")
-
-  //console.log(board)
 
 }
 
