@@ -6,8 +6,7 @@ let habitat = Object.fromEntries(params)
 
 // window elements
 let boardEl = document.getElementById("board")
-let infoEl = document.getElementById("basic-info")
-let frameEl = document.getElementById("frames")
+let logEl = document.getElementById("log")
 
 
 // initial game setup
@@ -20,7 +19,8 @@ function setup() {
   title.children[0].innerText = habitat.name
   document.getElementById("hr").classList.add(className)
 
-  updateBasicInfoFields() 
+  updateBasicInfoFields()
+  updateLogFields() 
 
   
 
@@ -37,7 +37,7 @@ function updateFieldsByClass(className, data) {
 
 // update fields to display game state
 function updateBasicInfoFields() {
-  let boardData = board.dataset
+  let boardData = boardEl.dataset
   updateFieldsByClass("info-frames", boardData.frames)
   updateFieldsByClass("info-children", boardData.children)
   updateFieldsByClass("info-adults", boardData.adults)
@@ -45,6 +45,22 @@ function updateBasicInfoFields() {
   updateFieldsByClass("info-food", boardData.food)
   updateFieldsByClass("info-wood", boardData.wood)
   updateFieldsByClass("info-stone", boardData.stone)
+}
+
+function updateLogFields() {
+  let log = logEl.dataset
+  updateFieldsByClass("log-food", log.food)
+  updateFieldsByClass("log-gather-meat", log.meat)
+  updateFieldsByClass("log-gather-forage", log.forage)
+  updateFieldsByClass("log-wood", log.wood)
+  updateFieldsByClass("log-stone", log.stone)
+
+  updateFieldsByClass("log-sic:whenk", log.sick)
+  updateFieldsByClass("log-born", log.born)
+  updateFieldsByClass("log-grew", log.grew)
+  updateFieldsByClass("log-deaths", log.deaths)
+  updateFieldsByClass("log-sickness", log.sickness)
+  updateFieldsByClass("log-oldage", log.oldage)
 }
 
 //

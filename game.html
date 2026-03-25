@@ -8,7 +8,7 @@
 
     <div id="habitat-title">
       <h1>.</h1>
-      <span>year: <span class="info-frames"></span></span>
+      <span>Year: <span class="info-frames"></span></span>
     </div>
 
     <div id="board" 
@@ -24,13 +24,16 @@
     >
       
       <div class="section">
-        <table id="basic-info">
+        <table>
           <tr>
-            <td>Children: <span class="info-children"></span></td>
-            <td>Adults: <span class="info-adults"></span></td>
-            <td>Elderly: <span class="info-old"></span></td>
+            <td>👶: <span class="info-children"></span></td>
+            <td>🧔: <span class="info-adults"></span></td>
+            <td>👴: <span class="info-old"></span></td>
+            <td>🤮: <span class="log-sick"></span></td>
           </tr>
-          <tr id="basic-info-resources">
+        </table>
+        <table>
+          <tr>
             <td>Food: <span class="info-food"></span></td>
             <td>Wood: <span class="info-wood"></span></td>
             <td>Stone: <span class="info-stone"></span></td>
@@ -46,14 +49,53 @@
 
 
 
+
     </div>
 
     <hr id="hr">
 
-    <div id="log">
+    <button>Done</button>
+
+    <div id="log" 
+      class="section"
+
+      data-food=0
+      data-meat=0
+      data-forage=0
+      data-wood=0
+      data-stone=0
+
+      data-sick=0
+      data-born=0
+      data-grew=0
+      data-deaths=0
+      data-sickness=0
+      data-oldage=0>
+
+      <h3>Previous year: </h3>
+      <p class="sub-heading">Gathered:</p>
+      <ul>
+        <li>Food: <span class="log-food"></span>
+          <span class="sub-text">(meat: <span class="log-gather-meat"></span> foraged: <span class="log-gather-forage"></span>)</span>
+        </li>
+        <li>Wood: <span class="log-wood"></span></li>
+        <li>Stone: <span class="log-stone"></span></li>
+      </ul>
+
+      <p class="sub-heading">Population:</p>
+      <ul>
+        <li>Sick: <span class="log-sick"></span></li>
+        <li>Children born: <span class="log-born"></span></li>
+        <li>Children grew: <span class="log-grew"></span></li>
+        <li>Deaths: <span class="log-deaths"></span>
+          <span class="sub-text">(sickness: <span class="log-sickness"></span> oldage: <span class="log-oldage"></span>)</span>
+        </li>
+      </ul>
+      
+
+
     </div>
 
-    <button>Done</button>
 
     <script src="index.js"></script>
   </body>
