@@ -6,7 +6,10 @@
   </head>
   <body id="game">
 
-    <h1 id="habitat-title">.</h1>
+    <div id="habitat-title">
+      <h1>.</h1>
+      <span id="frames">year: <span></span></span>
+    </div>
 
     <div id="board" 
       data-frames=0 
@@ -17,12 +20,27 @@
       data-wood=10 
       data-stone=10>
 
+      <table id=basic-info>
+        <tr id="basic-info-population">
+          <td>Children: <span></span></td>
+          <td>Adults: <span></span></td>
+          <td>Elderly: <span></span></td>
+        </tr>
+        <tr id="basic-info-resources">
+          <td>Food: <span></span></td>
+          <td>Wood: <span></span></td>
+          <td>Stone: <span></span></td>
+        </tr>
+      </table>
+
     </div>
 
     <hr id="hr">
 
-    <div id="info">
+    <div id="log">
     </div>
+
+    <button>Done</button>
 
     <script src="index.js"></script>
   </body>

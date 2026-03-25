@@ -3,39 +3,66 @@
 let fullurl = window.location.href
 let params = new URLSearchParams(new URL(fullurl).search)
 let habitat = Object.fromEntries(params)
-let board = document.getElementById("board")
+
+// window elements
+let boardEl = document.getElementById("board")
+let infoEl = document.getElementById("basic-info")
+let frameEl = document.getElementById("frames")
 
 
-console.log(habitat) //
+// initial game setup
+// INFO: this function should only be called once
+function setup() {
+  // set title and colours
+  let title = document.getElementById("habitat-title")
+  let className = `${habitat.name.toLowerCase()}`
+  title.classList.add(className)
+  title.children[0].innerText = habitat.name
+  document.getElementById("hr").classList.add(className)
 
-// add styles and info to elements
-let title = document.getElementById("habitat-title")
-let className = `${habitat.name.toLowerCase()}`
-title.innerText = habitat.name
-title.classList.add(className)
-document.getElementById("hr").classList.add(className)
+  updateBasicInfoFields() 
 
 
 
+}
+setup()
+
+// update fields to display game state
+function updateBasicInfoFields() {
+  let boardData = board.dataset
+
+  // INFO: update frame info
+  frameEl.children[0].innerText = boardData.frames
+
+  // INFO: update basic informatnion
+  // basic info population - bip
+  let bip = document.getElementById("basic-info-population").children
+  let bipChildren = bip[0].children[0]
+  bipChildren.innerText = boardData.children
+  let bipAdults = bip[1].children[0]
+  bipAdults.innerText = boardData.adults
+  let bipOld = bip[2].children[0]
+  bipOld.innerText = boardData.old
+
+  // basic info resources - bir
+  let bir = document.getElementById("basic-info-resources").children
+  let birFood = bir[0].children[0]
+  birFood.innerText = boardData.food
+  let birWood = bir[1].children[0]
+  birWood.innerText = boardData.wood
+  let birStone = bir[2].children[0]
+  birStone.innerText = boardData.stone
+
+}
+
+//
+// INFO: this function should be called when the done button is pressed
+function updateWhenDone() {}
+
+//
+// INFO: this function should be called when the done button is pressed
+function displayWhenDone() {}
 
 
 // TEST:
-let data = board.dataset
-console.log(`frames: ${data.frames}`)
-data.frames++
-console.log(`frames: ${data.frames}`)
-
-
-console.log(`population: 
-children: ${data.children}
-adults: ${data.adults}
-elderly: ${data.old}
-
-resources:
-food: ${data.food}
-wood: ${data.wood}
-stone: ${data.stone}
-`)
-
-
 

@@ -17,6 +17,7 @@
   --main-forest: #c09473;
   --border-forest: #7a4841;
 
+  --h1-size: 32px;
   --border-width: 6px;
 
 }
@@ -42,6 +43,9 @@ body {
   box-shadow: 0px 0px 10px 5px var(--shadow);
 }
 
+h1 {
+  font-size: var(--h1-size);
+}
 h1, h2 {
   text-align: center;
 }
@@ -79,6 +83,13 @@ a:active {
   transform: scale(0.95);
 }
 
+hr {
+  margin: 1rem 0;
+  border-style: solid;
+  border-width: var(--border-width)/2;
+  box-shadow: 0px 0px 10px 5px var(--shadow);
+}
+
 .swamp {
   background: var(--main-swamp);
   border-color: var(--border-swamp);
@@ -104,17 +115,25 @@ a:active {
 }
 
 #habitat-title {
+  display: flex;
+  flex-direction: column;
   margin: 0 0 1rem 0;
-  padding: 0 1rem;
-  line-height: 5rem;
+  padding: 1rem;
   border-bottom-style: solid;
   border-bottom-width: var(--border-width);
   box-shadow: 0px 0px 10px 5px var(--shadow);
 }
-
-hr {
-  margin: 1rem 0;
-  border-style: solid;
-  border-width: var(--border-width)/2;
-  box-shadow: 0px 0px 10px 5px var(--shadow);
+#habitat-title h1 {
+  margin: 0;
 }
+#habitat-title span {
+  text-align: center;
+}
+
+#basic-info {
+  border: 1px solid black
+}
+td{
+  border: 1px solid green;
+}
+
