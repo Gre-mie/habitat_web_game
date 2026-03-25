@@ -8,7 +8,7 @@
 
     <div id="habitat-title">
       <h1>.</h1>
-      <span id="frames">year: <span></span></span>
+      <span>year: <span class="info-frames"></span></span>
     </div>
 
     <div id="board" 
@@ -16,22 +16,35 @@
       data-children=0 
       data-adults=5 
       data-old=0 
+
       data-food=20 
       data-wood=10 
-      data-stone=10>
+      data-stone=10
+      data-shelter=0
+    >
+      
+      <div class="section">
+        <table id="basic-info">
+          <tr>
+            <td>Children: <span class="info-children"></span></td>
+            <td>Adults: <span class="info-adults"></span></td>
+            <td>Elderly: <span class="info-old"></span></td>
+          </tr>
+          <tr id="basic-info-resources">
+            <td>Food: <span class="info-food"></span></td>
+            <td>Wood: <span class="info-wood"></span></td>
+            <td>Stone: <span class="info-stone"></span></td>
+          </tr>
+        </table>
+      </div>
 
-      <table id=basic-info>
-        <tr id="basic-info-population">
-          <td>Children: <span></span></td>
-          <td>Adults: <span></span></td>
-          <td>Elderly: <span></span></td>
-        </tr>
-        <tr id="basic-info-resources">
-          <td>Food: <span></span></td>
-          <td>Wood: <span></span></td>
-          <td>Stone: <span></span></td>
-        </tr>
-      </table>
+      <div class="section">
+        <h2>Workers: <span class="var-workers"></span></h2>
+        <p id="worker-visual-display"></p>
+        <p class="sub-text">Pairs of unasigned workers will have a chnace to breed</p>
+      </div>
+
+
 
     </div>
 

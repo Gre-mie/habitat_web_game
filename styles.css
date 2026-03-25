@@ -5,6 +5,9 @@
   --text: #10141f;
   --shadow: #151d2820;
 
+  --board-background: #CBA681;
+  --board-border: #B98653;
+
   --main-swamp: #a8ca58;
   --border-swamp: #25562e;
   
@@ -35,7 +38,7 @@ body {
   box-sizing: border-box;
   padding: 1rem;
   max-width: 600px;
-  min-width: 400px;
+  min-width: 450px;
   min-height: 100vh;
   background: var(--game-background);
   border: solid var(--border-width) var(--game-border);
@@ -90,6 +93,10 @@ hr {
   box-shadow: 0px 0px 10px 5px var(--shadow);
 }
 
+td {
+  padding-right: 0.5rem;
+}
+
 .swamp {
   background: var(--main-swamp);
   border-color: var(--border-swamp);
@@ -110,8 +117,25 @@ hr {
   border-color: var(--border-forest);
 }
 
+.section {
+  margin: 0.5rem;
+  padding: 0.5rem;
+  background: var(--board-background);
+  border: 2px solid var(--board-border);
+  border-radius: 10px;
+}
+
+.sub-text {
+  margin: 0;
+  font-size: 12px;
+}
+
 #game {
   padding: 0;
+}
+
+#board h2 {
+  margin: 0;
 }
 
 #habitat-title {
@@ -131,9 +155,13 @@ hr {
 }
 
 #basic-info {
-  border: 1px solid black
+  width: 100%;
 }
-td{
-  border: 1px solid green;
+
+#worker-visual-display {
+  margin: 0;
+  height: 16px;
+  text-align: center;
 }
+
 

@@ -22,37 +22,29 @@ function setup() {
 
   updateBasicInfoFields() 
 
+  
 
 
 }
 setup()
 
+function updateFieldsByClass(className, data) {
+  let fields = document.getElementsByClassName(className)
+  for (let i = 0; i < fields.length; i++) {
+    fields[i].innerText = data
+  }
+}
+
 // update fields to display game state
 function updateBasicInfoFields() {
   let boardData = board.dataset
-
-  // INFO: update frame info
-  frameEl.children[0].innerText = boardData.frames
-
-  // INFO: update basic informatnion
-  // basic info population - bip
-  let bip = document.getElementById("basic-info-population").children
-  let bipChildren = bip[0].children[0]
-  bipChildren.innerText = boardData.children
-  let bipAdults = bip[1].children[0]
-  bipAdults.innerText = boardData.adults
-  let bipOld = bip[2].children[0]
-  bipOld.innerText = boardData.old
-
-  // basic info resources - bir
-  let bir = document.getElementById("basic-info-resources").children
-  let birFood = bir[0].children[0]
-  birFood.innerText = boardData.food
-  let birWood = bir[1].children[0]
-  birWood.innerText = boardData.wood
-  let birStone = bir[2].children[0]
-  birStone.innerText = boardData.stone
-
+  updateFieldsByClass("info-frames", boardData.frames)
+  updateFieldsByClass("info-children", boardData.children)
+  updateFieldsByClass("info-adults", boardData.adults)
+  updateFieldsByClass("info-old", boardData.old)
+  updateFieldsByClass("info-food", boardData.food)
+  updateFieldsByClass("info-wood", boardData.wood)
+  updateFieldsByClass("info-stone", boardData.stone)
 }
 
 //
