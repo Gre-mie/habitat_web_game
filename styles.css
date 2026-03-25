@@ -17,6 +17,8 @@
   --main-forest: #c09473;
   --border-forest: #7a4841;
 
+  --border-width: 6px;
+
 }
 
 html {
@@ -35,7 +37,7 @@ body {
   min-width: 400px;
   min-height: 100vh;
   background: var(--game-background);
-  border: solid 5px var(--game-border);
+  border: solid var(--border-width) var(--game-border);
   border-radius: 5px;
   box-shadow: 0px 0px 10px 5px var(--shadow);
 }
@@ -62,7 +64,7 @@ h1, h2 {
   text-decoration: none;
   color: var(--text);
   border-style: solid;
-  border-width: 5px;
+  border-width: var(--border-width);
   border-radius: 10px;
   box-shadow: 0px 0px 10px 5px var(--shadow);
 }
@@ -102,7 +104,17 @@ a:active {
 }
 
 #habitat-title {
-  margin: 0;
+  margin: 0 0 1rem 0;
   padding: 0 1rem;
   line-height: 5rem;
+  border-bottom-style: solid;
+  border-bottom-width: var(--border-width);
+  box-shadow: 0px 0px 10px 5px var(--shadow);
+}
+
+hr {
+  margin: 1rem 0;
+  border-style: solid;
+  border-width: var(--border-width)/2;
+  box-shadow: 0px 0px 10px 5px var(--shadow);
 }
