@@ -141,6 +141,11 @@ ul {
   font-size: 12px;
 }
 
+.bold-center {
+  font-weight: bold;
+  text-align: center;
+}
+
 .section h2, h3 {
   margin: 0;
 }
@@ -172,7 +177,8 @@ ul {
 
 #worker-visual-display {
   margin: 0;
-  height: 16px;
+  font-size: 22px;
+  min-height: 34px;
   text-align: center;
 }
 

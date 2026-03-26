@@ -7,7 +7,13 @@ let habitat = Object.fromEntries(params)
 // window elements
 let boardEl = document.getElementById("board")
 let logEl = document.getElementById("log")
+let workerEl = document.getElementById("var-workers")
+let workerDisplayEl = document.getElementById("worker-visual-display")
 
+// other game variables
+let maxPopulation = 50
+let maxFrames = 25
+let workerDisplay = []
 
 // initial game setup
 // INFO: this function should only be called once
@@ -19,8 +25,18 @@ function setup() {
   title.children[0].innerText = habitat.name
   document.getElementById("hr").classList.add(className)
 
+  // set visual display elements to reflect starting state of the game
   updateBasicInfoFields()
-  updateLogFields() 
+  updateLogFields()
+
+  // fill worker string with visual display of max posible workers
+  for (let i = 0; i < maxPopulation; i++) {
+    workerDisplay.push("𖨆")
+  }
+  
+  // calculate and display starting workers
+  workerEl.dataset.workers = calclulateWorkers()
+  updateWorkerDisplays(workerEl.dataset.workers)
 
   
 
@@ -28,6 +44,8 @@ function setup() {
 }
 setup()
 
+
+// updates all elements with className to display data
 function updateFieldsByClass(className, data) {
   let fields = document.getElementsByClassName(className)
   for (let i = 0; i < fields.length; i++) {
@@ -35,7 +53,7 @@ function updateFieldsByClass(className, data) {
   }
 }
 
-// update fields to display game state
+// update fields to display game state from board element
 function updateBasicInfoFields() {
   let boardData = boardEl.dataset
   updateFieldsByClass("info-frames", boardData.frames)
@@ -47,6 +65,7 @@ function updateBasicInfoFields() {
   updateFieldsByClass("info-stone", boardData.stone)
 }
 
+// update fields to display game state from logs element
 function updateLogFields() {
   let log = logEl.dataset
   updateFieldsByClass("log-food", log.food)
@@ -55,7 +74,7 @@ function updateLogFields() {
   updateFieldsByClass("log-wood", log.wood)
   updateFieldsByClass("log-stone", log.stone)
 
-  updateFieldsByClass("log-sic:whenk", log.sick)
+  updateFieldsByClass("log-sick", log.sick)
   updateFieldsByClass("log-born", log.born)
   updateFieldsByClass("log-grew", log.grew)
   updateFieldsByClass("log-deaths", log.deaths)
@@ -63,13 +82,34 @@ function updateLogFields() {
   updateFieldsByClass("log-oldage", log.oldage)
 }
 
-//
-// INFO: this function should be called when the done button is pressed
-function updateWhenDone() {}
+// calculates number of workers
+function calclulateWorkers() {
+  let data = boardEl.dataset
+  let workers = parseInt(data.adults)
+  let notWorkers = parseInt(data.children) + parseInt(data.old)
+  let sick = parseInt(logEl.dataset.sick)
 
-//
-// INFO: this function should be called when the done button is pressed
-function displayWhenDone() {}
+  if (sick > notWorkers) {
+    workers -= sick
+  }
+  if (workers < 0) {workers = 0}
+  return workers
+}
+
+// updates worker display elements
+function updateWorkerDisplays(workers) {
+  workerEl.innerText = workers
+  workerDisplayEl.textContent = workerDisplay.slice(0, workers).join("")
+}
+
+
+
+
+// TODO: CHECK FOR WIN CONDITION 
+// population >= maxPopulation || frames >= maxFrames (years)
+
+// TODO: CHECK FOR LOOSE CONDITION
+// population <= 0
 
 
 // TEST:
