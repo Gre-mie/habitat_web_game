@@ -24,6 +24,7 @@ function setup() {
   title.classList.add(className)
   title.children[0].innerText = habitat.name
   document.getElementById("hr").classList.add(className)
+  document.getElementById("evaluate-year").classList.add(className)
 
   // set visual display elements to reflect starting state of the game
   updateBasicInfoFields()
@@ -103,13 +104,19 @@ function updateWorkerDisplays(workers) {
 }
 
 
+// this function will be called by the "continue" button
+function evaluateYear() {
+  console.log("evaluating Year...") // TEST:
 
 
+// do these last
 // TODO: CHECK FOR WIN CONDITION 
 // population >= maxPopulation || frames >= maxFrames (years)
 
 // TODO: CHECK FOR LOOSE CONDITION
 // population <= 0
+
+}
 
 
 // TEST:
