@@ -70,6 +70,7 @@ function updateFieldsByClass(className, data) {
 function updateBasicInfoFields() {
   let boardData = boardEl.dataset
   let build = buildEl.dataset
+  updateFieldsByClass("info-population", calculatePopulation())
   updateFieldsByClass("info-frames", boardData.frames)
   updateFieldsByClass("info-children", boardData.children)
   updateFieldsByClass("info-adults", boardData.adults)
@@ -137,12 +138,17 @@ function updateWorkerDisplays(workers) {
   workerDisplayEl.textContent = workerDisplay.slice(0, workers).join("")
 }
 
+function calculatePopulation() {
+  let boardData = boardEl.dataset
+  return parseInt(boardData.children) + parseInt(boardData.adults) + parseInt(boardData.old)
+}
 
 
 
 
 // this function will be called by the "continue" button
 function evaluateYear() {
+  let boardData = boardEl.dataset
   // this function is where most of the logic should be 
   update()
 
@@ -152,16 +158,20 @@ function evaluateYear() {
 
 
 
-
+  newYearSetup()
 
 // do these last
-// TODO: CHECK FOR WIN CONDITION 
-// population >= maxPopulation || frames >= maxFrames (years)
+  let population = calculatePopulation()
 
-// TODO: CHECK FOR LOOSE CONDITION
-// population <= 0
+// TODO: DISPLAY END GAME STATUS (WIN) BUTTON TO GO BACK TO index.html
+  if (population >= maxPopulation || boardData.frames >= maxFrames) {
+    console.log("Win condition met") // TEST: 
+  }
 
-  newYearSetup()
+// TODO: DISPLAY END GAME STATUS (LOOSE) BUTTON TO GO BACK TO index.html
+  if (population <= 0) {
+    console.log("Loose condition met")
+  }
 
   // display info and logs
   updateBasicInfoFields()
