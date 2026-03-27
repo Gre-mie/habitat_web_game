@@ -28,7 +28,7 @@
           <tr>
             <td>👶: <span class="info-children"></span></td>
             <td>🧔: <span class="info-adults"></span></td>
-            <td>👴: <span class="info-old"></span></td>
+            <td>👴: <span class="info-old" ></span></td>
             <td>🤮: <span class="log-sick"></span></td>
           </tr>
         </table>
@@ -42,10 +42,38 @@
       </div>
 
       <div class="section">
-        <h2>Workers: <span id="var-workers" data-workers=0></span></h2>
+        <h2>Workers: <span id="info-workers" data-workers=0></span></h2>
         <p id="worker-visual-display"></p>
         <p class="sub-text bold-center">Pairs of unasigned workers will have a chance to breed</p>
       </div>
+
+      <div id="info-build" 
+        class="section"
+        data-builders=0
+        data-shack=0
+        data-house=0
+        data-manor=0
+      >
+  
+        <h3>Builders: <span class="info-builders"></span>
+          <span class="sub-text">(Shelter: <span class="info-shelter"></span>)</span>
+        </h3>
+        <table>
+          <tr>
+            <button class="inc-dec" onclick="incBuild('shack')">+</button>
+            <span class="build-shack"></span>
+            <button class="inc-dec" onclick="decBuild('shack')">-</button>
+          </tr>
+          <tr></tr>
+          <tr></tr>
+        </table>
+        <p>Resources available: wood: <span class="available-wood"></span> stone: <span class="avaiable-stone"></span></p>
+
+      </div>
+
+
+
+
 
 
 
@@ -72,7 +100,8 @@
       data-grew=0
       data-deaths=0
       data-sickness=0
-      data-oldage=0>
+      data-oldage=0
+      data-shelter=0>
 
       <h3>Previous year: </h3>
       <p class="sub-heading">Gathered:</p>
@@ -91,6 +120,12 @@
         <li>Children grew: <span class="log-grew"></span></li>
         <li>Deaths: <span class="log-deaths"></span>
           <span class="sub-text">(sickness: <span class="log-sickness"></span> oldage: <span class="log-oldage"></span>)</span>
+        </li>
+      </ul>
+      <p class="sub-heading">Buildings:</p>
+      <ul>
+        <li>Shelter built: <span class="log-shelter"></span>
+          <span class="sub-text">(shack: <span class="log-shack"></span> house: <span class="log-house"></span> manor: <span class="log-manor"></span>)</span>
         </li>
       </ul>
       
