@@ -23,6 +23,7 @@
   --h1-size: 32px;
   --border-width: 6px;
 
+
 }
 
 html {
@@ -159,6 +160,16 @@ ul {
 .container-horizontal-center {
   display: flex;
   justify-content: center;
+}
+
+.inc-dec {
+  font-size: 18px;
+  font-weight: bold;
+  min-width: 26px;
+  min-height: 26px;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 50%;
 }
 
 #game {

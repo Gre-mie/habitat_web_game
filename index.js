@@ -11,10 +11,23 @@ let workerEl = document.getElementById("info-workers")
 let workerDisplayEl = document.getElementById("worker-visual-display")
 let buildEl = document.getElementById("info-build")
 
+// element data
+let boardData = boardEl.dataset
+let logData = logEl.dataset
+let workerData = workerEl.dataset
+let buildData = buildEl.dataset
+
 // other game variables
 let maxPopulation = 50
 let maxFrames = 25
 let workerDisplay = []
+
+
+// TEST: vvv
+boardData.wood = 60
+// TEST: ^^^
+
+
 
 // initial game setup
 // INFO: this function should only be called once
@@ -27,15 +40,33 @@ function setup() {
   document.getElementById("hr").classList.add(className)
   document.getElementById("evaluate-year").classList.add(className)
 
+  // colour buttons
+  let buttons = document.getElementsByClassName("inc-dec")
+  for (let i = 0; i < buttons.length; i++) {
+    buttons[i].classList.add(className)
+  }
+
   // fill worker string with visual display of max posible workers
   for (let i = 0; i < maxPopulation; i++) {
     workerDisplay.push("𖨆")
   }
 
-  update()
-  
-  
- 
+  // display building cost
+  document.getElementById("cost-shackwood").textContent = buildData.shackwood
+  document.getElementById("cost-housestone").textContent = buildData.housestone
+  document.getElementById("cost-manorwood").textContent = buildData.manorwood
+  document.getElementById("cost-manorstone").textContent = buildData.manorstone
+  document.getElementById("cost-shackbuilder").textContent = buildData.shackbuilder
+  document.getElementById("cost-housebuilder").textContent = buildData.housebuilder
+  document.getElementById("cost-manorbuilder").textContent = buildData.manorbuilder
+  updateFieldsByClass("available-wood", parseInt(boardData.wood) - parseInt(buildData.costwood))
+  updateFieldsByClass("available-stone", parseInt(boardData.stone) - parseInt(buildData.coststone))
+
+  // calculate and display workers
+  workerData.workers = calclulateWorkers()
+  updateWorkerDisplays(workerData.workers)
+
+
   
   // display info and logs
   updateBasicInfoFields()
@@ -44,12 +75,49 @@ function setup() {
 }
 setup()
 
+
+
 // runs calculations and updates fields across all fields
 function update() {
+  boardData.frames++
 
-   // calculate and display workers
-  workerEl.dataset.workers = calclulateWorkers()
-  updateWorkerDisplays(workerEl.dataset.workers)
+  // calculate and display workers
+  workerData.workers = calclulateWorkers()
+  updateWorkerDisplays(workerData.workers)
+
+
+  // add buildings built
+  // add to shelter
+  let shackBuilt = parseInt(buildData.shack)*parseInt(buildData.shackshelter)
+  let houseBuilt = parseInt(buildData.house)*parseInt(buildData.houseshelter)
+  let manorBuilt = parseInt(buildData.manor)*parseInt(buildData.manorshelter)
+  let shelterGained = shackBuilt + houseBuilt + manorBuilt
+  boardData.shelter = parseInt(boardData.shelter) + shelterGained
+  logData.shelter = shelterGained
+
+
+
+  // remove resources
+  boardData.wood = parseInt(boardData.wood) - parseInt(buildData.costwood)
+  boardData.stone = parseInt(boardData.stone) - parseInt(buildData.coststone)
+
+
+  console.log(buildData)
+  console.log(logData)
+
+  updateLogFields()
+  
+  // reset build vars
+  buildData.builders = 0
+  buildData.shack = 0
+  buildData.house = 0
+  buildData.manor = 0
+  buildData.costwood = 0
+  buildData.coststone = 0
+  
+
+  
+
 
   // TODO: ADD UPDATE INFO
 
@@ -57,6 +125,133 @@ function update() {
 
 
 }
+
+function incBuilding(building) {
+    let wood = parseInt(boardData.wood)
+    let stone = parseInt(boardData.stone)
+    let workers = parseInt(workerData.workers)
+  switch (building) {
+    case "shack":
+
+      let shackCost = parseInt(buildData.shackwood)
+      let woodSpent = parseInt(buildData.costwood)
+      let shackBuilder = parseInt(buildData.shackbuilder)
+
+      // check avaiable resources
+     if ((woodSpent+shackCost) > wood) {break;}
+     if (shackBuilder > workers) {break;}
+
+      // inc building
+      buildData.shack = parseInt(buildData.shack) + 1
+
+      console.log(buildData.shack)
+       
+      // dec resources - update things
+      buildData.costwood = parseInt(buildData.costwood) + shackCost
+
+      // dec workers - update builders
+      workerData.workers = parseInt(workerData.workers) - shackBuilder
+      buildData.builders = parseInt(buildData.builders) + shackBuilder
+      
+      // update display
+      updateFieldsByClass("build-shack", buildData.shack)
+      updateWorkerDisplays(workerData.workers)
+      updateFieldsByClass("info-builders", buildData.builders)
+      
+
+      
+
+
+    case "house":
+      // check wood and workers - break if not
+      
+      // inc buildings 
+      
+      // dec resources - update things
+
+      // dec workers - update builders 
+
+      // update display
+
+    case "manor":
+      // check wood and workers - break if not
+      
+      // inc buildings 
+      
+      // dec resources - update things
+
+      // dec workers - update builders 
+
+      // update display
+
+
+
+  }
+  updateFieldsByClass("available-wood", parseInt(boardData.wood) - parseInt(buildData.costwood))
+  updateFieldsByClass("available-stone", parseInt(boardData.stone) - parseInt(buildData.coststone))
+}
+
+function decBuilding(building) {
+  //let wood = parseInt(boardData.wood)
+  //let stone = parseInt(boardData.stone)
+  //let workers = parseInt(workerData.workers)
+
+  switch (building) {
+    case "shack":
+      let shackCost = parseInt(buildData.shackwood)
+      let shackBuilder = parseInt(buildData.shackbuilder)
+
+      // check building is > 0 - break if not
+      if (buildData.shack <= 0) {break}
+
+      // dec buildings 
+      buildData.shack = parseInt(buildData.shack) - 1
+      
+      // inc resources - update things
+      buildData.costwood = parseInt(buildData.costwood) - shackCost
+
+      // inc workers - update builders
+      workerData.workers = parseInt(workerData.workers) + shackBuilder
+
+
+
+      // update display
+      updateFieldsByClass("build-shack", buildData.shack)
+      updateWorkerDisplays(workerData.workers)
+      updateFieldsByClass("info-builders", buildData.builders)
+
+      
+
+    case "house":
+      // check building is > 0 - break if not 
+
+      // dec buildings 
+      
+      // inc resources - update things
+
+      // inc workers - update builders 
+
+      // update display
+
+
+    case "manor":
+      // check building is > 0 - break if not 
+
+      // dec buildings 
+      
+      // inc resources - update things
+
+      // inc workers - update builders 
+
+      // update display
+
+
+
+  }
+  updateFieldsByClass("available-wood", parseInt(boardData.wood) - parseInt(buildData.costwood))
+  updateFieldsByClass("available-stone", parseInt(boardData.stone) - parseInt(buildData.coststone))
+}
+
 
 // updates all elements with className to display data
 function updateFieldsByClass(className, data) {
@@ -68,8 +263,6 @@ function updateFieldsByClass(className, data) {
 
 // update fields to display game state from board element
 function updateBasicInfoFields() {
-  let boardData = boardEl.dataset
-  let build = buildEl.dataset
   updateFieldsByClass("info-population", calculatePopulation())
   updateFieldsByClass("info-frames", boardData.frames)
   updateFieldsByClass("info-children", boardData.children)
@@ -79,51 +272,42 @@ function updateBasicInfoFields() {
   updateFieldsByClass("info-wood", boardData.wood)
   updateFieldsByClass("info-stone", boardData.stone)
 
-  updateFieldsByClass("info-builders", build.builders)
+  updateFieldsByClass("info-builders", buildData.builders)
   updateFieldsByClass("info-shelter", boardData.shelter)
+  updateFieldsByClass("build-shack", buildData.shack)
+  updateFieldsByClass("build-house", buildData.house)
+  updateFieldsByClass("build-manor", buildData.manor)
+  
+
 }
 
 // update fields to display game state from logs element
 function updateLogFields() {
-  let log = logEl.dataset
-  let build = buildEl.dataset
-  updateFieldsByClass("log-food", log.food)
-  updateFieldsByClass("log-gather-meat", log.meat)
-  updateFieldsByClass("log-gather-forage", log.forage)
-  updateFieldsByClass("log-wood", log.wood)
-  updateFieldsByClass("log-stone", log.stone)
+  updateFieldsByClass("log-food", logData.food)
+  updateFieldsByClass("log-gather-meat", logData.meat)
+  updateFieldsByClass("log-gather-forage", logData.forage)
+  updateFieldsByClass("log-wood", logData.wood)
+  updateFieldsByClass("log-stone", logData.stone)
 
-  updateFieldsByClass("log-sick", log.sick)
-  updateFieldsByClass("log-born", log.born)
-  updateFieldsByClass("log-grew", log.grew)
-  updateFieldsByClass("log-deaths", log.deaths)
-  updateFieldsByClass("log-sickness", log.sickness)
-  updateFieldsByClass("log-oldage", log.oldage)
+  updateFieldsByClass("log-sick", logData.sick)
+  updateFieldsByClass("log-born", logData.born)
+  updateFieldsByClass("log-grew", logData.grew)
+  updateFieldsByClass("log-deaths", logData.deaths)
+  updateFieldsByClass("log-sickness", logData.sickness)
+  updateFieldsByClass("log-oldage", logData.oldage)
 
-  updateFieldsByClass("log-shelter", log.shelter)
-  updateFieldsByClass("log-shack", build.shack)
-  updateFieldsByClass("log-house", build.house)
-  updateFieldsByClass("log-manor", build.manor)
-
-}
-
-// TODO: ADD DATA AND LOGS TO BE RESET
-// resets varaibles, to be used after the year evaluates
-function newYearSetup() {
-  let boardData = boardEl.dataset
-  let log = logEl.dataset
-  let build = buildEl.dataset 
-
-  boardData.frames++
+  updateFieldsByClass("log-shelter", logData.shelter)
+  updateFieldsByClass("log-shack", buildData.shack)
+  updateFieldsByClass("log-house", buildData.house)
+  updateFieldsByClass("log-manor", buildData.manor)
 
 }
 
 // calculates number of workers 
 function calclulateWorkers() {
-  let data = boardEl.dataset
-  let workers = parseInt(data.adults)
-  let notWorkers = parseInt(data.children) + parseInt(data.old)
-  let sick = parseInt(logEl.dataset.sick)
+  let workers = parseInt(boardData.adults)
+  let notWorkers = parseInt(boardData.children) + parseInt(boardData.old)
+  let sick = parseInt(logData.sick)
 
   if (sick > notWorkers) {
     workers -= sick
@@ -139,26 +323,18 @@ function updateWorkerDisplays(workers) {
 }
 
 function calculatePopulation() {
-  let boardData = boardEl.dataset
   return parseInt(boardData.children) + parseInt(boardData.adults) + parseInt(boardData.old)
 }
 
 
 
-
 // this function will be called by the "continue" button
 function evaluateYear() {
-  let boardData = boardEl.dataset
   // this function is where most of the logic should be 
   update()
 
 
   console.log("evaluating Year...") // TEST:
-
-
-
-
-  newYearSetup()
 
 // do these last
   let population = calculatePopulation()
@@ -175,7 +351,8 @@ function evaluateYear() {
 
   // display info and logs
   updateBasicInfoFields()
-  updateLogFields()
+  //updateLogFields()
+
 }
 
 

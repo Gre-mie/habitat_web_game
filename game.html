@@ -42,7 +42,9 @@
       </div>
 
       <div class="section">
-        <h2>Workers: <span id="info-workers" data-workers=0></span></h2>
+        <h2>Workers: <span id="info-workers" 
+          data-workers=0
+        ></span></h2>
         <p id="worker-visual-display"></p>
         <p class="sub-text bold-center">Pairs of unasigned workers will have a chance to breed</p>
       </div>
@@ -50,24 +52,59 @@
       <div id="info-build" 
         class="section"
         data-builders=0
+
         data-shack=0
+        data-shackwood=10
+        data-shackbuilder=1
+        data-shackshelter=3
+
         data-house=0
+        data-housestone=20
+        data-housebuilder=1
+        data-houseshelter=5
+
         data-manor=0
+        data-manorwood=15
+        data-manorstone=25
+        data-manorbuilder=2
+        data-manorshelter=8
+
+        data-costwood=0
+        data-coststone=0
       >
   
         <h3>Builders: <span class="info-builders"></span>
           <span class="sub-text">(Shelter: <span class="info-shelter"></span>)</span>
         </h3>
+
         <table>
           <tr>
-            <button class="inc-dec" onclick="incBuild('shack')">+</button>
-            <span class="build-shack"></span>
-            <button class="inc-dec" onclick="decBuild('shack')">-</button>
+            <td>
+              <button class="inc-dec dec" onclick="decBuilding('shack')">-</button>
+              <span class="build-shack"></span>
+              <button class="inc-dec inc" onclick="incBuilding('shack')">+</button>
+              <span class="sub-text">(wood: <span id="cost-shackwood"></span> builders: <span id="cost-shackbuilder"></span>)</span>
+            </td>
           </tr>
-          <tr></tr>
-          <tr></tr>
+          <tr>
+            <td>
+              <span>
+                <button class="inc-dec dec" onclick="decBuilding('house')">-</button>
+                <span class="build-house"></span>
+                <button class="inc-dec inc" onclick="incBuilding('house')">+</button>
+              <span class="sub-text">(stone: <span id="cost-housestone"></span> builders: <span id="cost-housebuilder"></span>)</span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <button class="inc-dec dec" onclick="decBuilding('manor')">-</button>
+              <span class="build-manor"></span>
+              <button class="inc-dec inc" onclick="incBuilding('manor')">+</button>
+              <span class="sub-text">(wood: <span id="cost-manorwood"></span> stone: <span id="cost-manorstone"></span> builders: <span id="cost-manorbuilder"></span>)</span>
+            </td>
+          </tr>
         </table>
-        <p>Resources available: wood: <span class="available-wood"></span> stone: <span class="avaiable-stone"></span></p>
+        <p>Resources available, <span>wood: <span class="available-wood"></span> stone: <span class="available-stone"></span></p>
 
       </div>
 
@@ -124,7 +161,7 @@
       </ul>
       <p class="sub-heading">Buildings:</p>
       <ul>
-        <li>Shelter built: <span class="log-shelter"></span>
+        <li>Shelter gained: <span class="log-shelter"></span>
           <span class="sub-text">(shack: <span class="log-shack"></span> house: <span class="log-house"></span> manor: <span class="log-manor"></span>)</span>
         </li>
       </ul>
