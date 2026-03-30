@@ -37,7 +37,7 @@ function setup() {
   let className = `${habitat.name.toLowerCase()}`
   title.classList.add(className)
   title.children[0].innerText = habitat.name
-  document.getElementById("hr").classList.add(className)
+  document.getElementById("bookmark-log").classList.add(className)
   document.getElementById("evaluate-year").classList.add(className)
 
   // colour buttons
@@ -351,7 +351,10 @@ function evaluateYear() {
 
   // display info and logs
   updateBasicInfoFields()
-  //updateLogFields()
+
+ 
+  // jump to the logs 
+  document.getElementById("bookmark-log").scrollIntoView()
 
 }
 
