@@ -59,8 +59,8 @@ function setup() {
   document.getElementById("cost-shackbuilder").textContent = buildData.shackbuilder
   document.getElementById("cost-housebuilder").textContent = buildData.housebuilder
   document.getElementById("cost-manorbuilder").textContent = buildData.manorbuilder
-  updateFieldsByClass("available-wood", parseInt(boardData.wood) - parseInt(buildData.costwood))
-  updateFieldsByClass("available-stone", parseInt(boardData.stone) - parseInt(buildData.coststone))
+  updateFieldsByClass("available-wood", parseInt(boardData.wood) - parseInt(buildData.woodspent))
+  updateFieldsByClass("available-stone", parseInt(boardData.stone) - parseInt(buildData.stonespent))
 
   // calculate and display workers
   workerData.workers = calclulateWorkers()
@@ -95,15 +95,12 @@ function update() {
   boardData.shelter = parseInt(boardData.shelter) + shelterGained
   logData.shelter = shelterGained
 
-
-
   // remove resources
-  boardData.wood = parseInt(boardData.wood) - parseInt(buildData.costwood)
-  boardData.stone = parseInt(boardData.stone) - parseInt(buildData.coststone)
+  boardData.wood = parseInt(boardData.wood) - parseInt(buildData.woodspent)
+  boardData.stone = parseInt(boardData.stone) - parseInt(buildData.stonespent)
 
 
-  console.log(buildData)
-  console.log(logData)
+
 
   updateLogFields()
   
@@ -112,8 +109,8 @@ function update() {
   buildData.shack = 0
   buildData.house = 0
   buildData.manor = 0
-  buildData.costwood = 0
-  buildData.coststone = 0
+  buildData.woodspent = 0
+  buildData.stonespent = 0
   
 
   
@@ -133,21 +130,19 @@ function incBuilding(building) {
   switch (building) {
     case "shack":
 
-      let shackCost = parseInt(buildData.shackwood)
-      let woodSpent = parseInt(buildData.costwood)
+      let shackWoodCost = parseInt(buildData.shackwood)
+      let woodSpent = parseInt(buildData.woodspent)
       let shackBuilder = parseInt(buildData.shackbuilder)
 
       // check avaiable resources
-     if ((woodSpent+shackCost) > wood) {break;}
+     if ((woodSpent+shackWoodCost) > wood) {break;}
      if (shackBuilder > workers) {break;}
 
       // inc building
       buildData.shack = parseInt(buildData.shack) + 1
 
-      console.log(buildData.shack)
-       
-      // dec resources - update things
-      buildData.costwood = parseInt(buildData.costwood) + shackCost
+      // dec resources
+      buildData.woodspent = parseInt(buildData.woodspent) + shackWoodCost
 
       // dec workers - update builders
       workerData.workers = parseInt(workerData.workers) - shackBuilder
@@ -163,6 +158,12 @@ function incBuilding(building) {
 
 
     case "house":
+      let houseStoneCost = parseInt(buildData.housestone)
+      let stoneSpent = parseInt(buildData.stonespent)
+      
+      console.log(`house cost, stone: ${houseStoneCost}`)
+      console.log(`total stone cost: ${stoneSpent}`)
+
       // check wood and workers - break if not
       
       // inc buildings 
@@ -187,8 +188,8 @@ function incBuilding(building) {
 
 
   }
-  updateFieldsByClass("available-wood", parseInt(boardData.wood) - parseInt(buildData.costwood))
-  updateFieldsByClass("available-stone", parseInt(boardData.stone) - parseInt(buildData.coststone))
+  updateFieldsByClass("available-wood", parseInt(boardData.wood) - parseInt(buildData.woodspent))
+  updateFieldsByClass("available-stone", parseInt(boardData.stone) - parseInt(buildData.stonespent))
 }
 
 function decBuilding(building) {
@@ -198,7 +199,7 @@ function decBuilding(building) {
 
   switch (building) {
     case "shack":
-      let shackCost = parseInt(buildData.shackwood)
+      let shackWoodCost = parseInt(buildData.shackwood)
       let shackBuilder = parseInt(buildData.shackbuilder)
 
       // check building is > 0 - break if not
@@ -208,12 +209,13 @@ function decBuilding(building) {
       buildData.shack = parseInt(buildData.shack) - 1
       
       // inc resources - update things
-      buildData.costwood = parseInt(buildData.costwood) - shackCost
+      buildData.woodspent = parseInt(buildData.woodspent) - shackWoodCost
 
       // inc workers - update builders
       workerData.workers = parseInt(workerData.workers) + shackBuilder
 
-
+      // dec builders
+      buildData.builders = parseInt(buildData.builders) - 1
 
       // update display
       updateFieldsByClass("build-shack", buildData.shack)
@@ -248,8 +250,8 @@ function decBuilding(building) {
 
 
   }
-  updateFieldsByClass("available-wood", parseInt(boardData.wood) - parseInt(buildData.costwood))
-  updateFieldsByClass("available-stone", parseInt(boardData.stone) - parseInt(buildData.coststone))
+  updateFieldsByClass("available-wood", parseInt(boardData.wood) - parseInt(buildData.woodspent))
+  updateFieldsByClass("available-stone", parseInt(boardData.stone) - parseInt(buildData.stonespent))
 }
 
 
@@ -353,7 +355,7 @@ function evaluateYear() {
   updateBasicInfoFields()
 
  
-  // jump to the logs 
+  // jump to the logs on html page  
   document.getElementById("bookmark-log").scrollIntoView()
 
 }
