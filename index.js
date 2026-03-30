@@ -2,7 +2,9 @@
 // get habitat variables
 let fullurl = window.location.href
 let params = new URLSearchParams(new URL(fullurl).search)
-let habitat = Object.fromEntries(params)
+let habitatData = Object.fromEntries(params)
+
+console.log(habitatData)
 
 // window elements
 let boardEl = document.getElementById("board")
@@ -10,12 +12,14 @@ let logEl = document.getElementById("log")
 let workerEl = document.getElementById("info-workers")
 let workerDisplayEl = document.getElementById("worker-visual-display")
 let buildEl = document.getElementById("info-build")
+let jobEl = document.getElementById("info-jobs")
 
 // element data
 let boardData = boardEl.dataset
 let logData = logEl.dataset
 let workerData = workerEl.dataset
 let buildData = buildEl.dataset
+let jobData = jobEl.dataset
 
 // other game variables
 let maxPopulation = 50
@@ -35,9 +39,9 @@ boardData.stone = 120
 function setup() {
   // set title and colours
   let title = document.getElementById("habitat-title")
-  let className = `${habitat.name.toLowerCase()}`
+  let className = `${habitatData.name.toLowerCase()}`
   title.classList.add(className)
-  title.children[0].innerText = habitat.name
+  title.children[0].innerText = habitatData.name
   document.getElementById("bookmark-log").classList.add(className)
   document.getElementById("evaluate-year").classList.add(className)
 
@@ -103,7 +107,6 @@ function update() {
 
 
 
-
   updateLogFields()
   
   // reset build vars
@@ -113,18 +116,19 @@ function update() {
   buildData.manor = 0
   buildData.woodspent = 0
   buildData.stonespent = 0
+
+  // reset job vars
+  jobData.forager=0
+  jobData.hunter=0
+  jobData.woodcutter=0
+  jobData.miner=0
   
 
   
-
-
-  // TODO: ADD UPDATE INFO
-
-
-
 
 }
 
+// building increment buttons
 function incBuilding(building) {
     let wood = parseInt(boardData.wood)
     let stone = parseInt(boardData.stone)
@@ -142,13 +146,8 @@ function incBuilding(building) {
      if ((woodSpent+shackWoodCost) > wood) {break;}
      if (shackBuilder > workers) {break;}
 
-      // inc building
       buildData.shack = parseInt(buildData.shack) + 1
-
-      // dec resources
       buildData.woodspent = parseInt(buildData.woodspent) + shackWoodCost
-
-      // dec workers
       workerData.workers = parseInt(workerData.workers) - shackBuilder
       buildData.builders = parseInt(buildData.builders) + shackBuilder
 
@@ -160,17 +159,11 @@ function incBuilding(building) {
       let houseStoneCost = parseInt(buildData.housestone)
       let houseBuilder = parseInt(buildData.housebuilder)
 
-      // check wood and workers
       if ((stoneSpent+houseStoneCost) > stone) {break;}
       if (houseBuilder > workers) {break;}
       
-      // inc buildings 
       buildData.house = parseInt(buildData.house) + 1
-      
-      // dec resources
       buildData.stonespent = parseInt(buildData.stonespent) + houseStoneCost
-
-      // dec workers 
       workerData.workers = parseInt(workerData.workers) - houseBuilder
       buildData.builders = parseInt(buildData.builders) + houseBuilder
 
@@ -183,19 +176,13 @@ function incBuilding(building) {
       let manorStoneCost = parseInt(buildData.manorstone)
       let manorBuilder = parseInt(buildData.manorbuilder)
 
-      // check wood and workers
       if ((woodSpent+manorWoodCost) > wood) {break;}
       if ((stoneSpent+manorStoneCost) > stone) {break;}
       if (manorBuilder > workers) {break;} 
 
-      // inc buildings 
       buildData.manor = parseInt(buildData.manor) + 1
-      
-      // dec resources - update things
       buildData.woodspent = parseInt(buildData.woodspent) + manorWoodCost
       buildData.stonespent = parseInt(buildData.stonespent) + manorStoneCost
-
-      // dec workers
       workerData.workers = parseInt(workerData.workers) - manorBuilder
       buildData.builders = parseInt(buildData.builders) + manorBuilder
 
@@ -203,7 +190,6 @@ function incBuilding(building) {
       updateFieldsByClass("build-manor", buildData.manor)
       break
   }
-  // update display
   updateWorkerDisplays(workerData.workers)
   updateFieldsByClass("info-builders", buildData.builders)
   updateFieldsByClass("available-wood", parseInt(boardData.wood) - parseInt(buildData.woodspent))
@@ -211,49 +197,32 @@ function incBuilding(building) {
 
 }
 
+// building decrement buttons 
 function decBuilding(building) {
   switch (building) {
     case "shack":
       let shackWoodCost = parseInt(buildData.shackwood)
       let shackBuilder = parseInt(buildData.shackbuilder)
 
-      // check building is > 0 - break if not
       if (buildData.shack <= 0) {break}
 
-      // dec buildings 
       buildData.shack = parseInt(buildData.shack) - 1
-
-      // inc resources
       buildData.woodspent = parseInt(buildData.woodspent) - shackWoodCost
-
-      // inc workers
       workerData.workers = parseInt(workerData.workers) + shackBuilder
-
-      // dec builders
       buildData.builders = parseInt(buildData.builders) - shackBuilder
 
       // update display
       updateFieldsByClass("build-shack", buildData.shack) 
       break
 
-
     case "house":
       let houseStoneCost = parseInt(buildData.housestone)
       let houseBuilder = parseInt(buildData.housebuilder)
 
-      // check building is > 0 
       if (buildData.house <= 0) {break}
-
-      // dec buildings
       buildData.house = parseInt(buildData.house) - 1
-
-      // inc resources
       buildData.stonespent = parseInt(buildData.stonespent) - houseStoneCost
-
-      // inc workers 
       workerData.workers = parseInt(workerData.workers) + houseBuilder
-
-      // dec builders
       buildData.builders = parseInt(buildData.builders) - houseBuilder
 
       // update display
@@ -265,32 +234,88 @@ function decBuilding(building) {
       let manorStoneCost = parseInt(buildData.manorstone)
       let manorBuilder = parseInt(buildData.manorbuilder)
 
-      // check building is > 0
       if (buildData.manor <= 0) {break}
 
-      // dec buildings 
       buildData.manor = parseInt(buildData.manor) - 1
-
-      // inc resources
       buildData.woodspent = parseInt(buildData.woodspent) - manorWoodCost
       buildData.stonespent = parseInt(buildData.stonespent) - manorStoneCost
-
-      // inc workers
       workerData.workers = parseInt(workerData.workers) + manorBuilder
-
-      // dec builders
       buildData.builders = parseInt(buildData.builders) - manorBuilder
 
       // update display
       updateFieldsByClass("build-manor", buildData.manor)
       break
-
   }
-
   updateWorkerDisplays(workerData.workers)
   updateFieldsByClass("info-builders", buildData.builders)
   updateFieldsByClass("available-wood", parseInt(boardData.wood) - parseInt(buildData.woodspent))
   updateFieldsByClass("available-stone", parseInt(boardData.stone) - parseInt(buildData.stonespent))
+}
+
+// jobs increment buttons 
+function incJob(job) {
+  switch (job) {
+    case "forager":
+      if (workerData.workers <= 0) {break}
+      jobData.forager = parseInt(jobData.forager) + 1
+      workerData.workers = parseInt(workerData.workers) - 1
+      updateFieldsByClass("job-forager", jobData.forager)
+      break
+    case "hunter":
+      if (workerData.workers <= 0) {break}
+      jobData.hunter = parseInt(jobData.hunter) + 1
+      workerData.workers = parseInt(workerData.workers) - 1
+      updateFieldsByClass("job-hunter", jobData.hunter)
+      break
+    case "woodcutter":
+      if (workerData.workers <= 0) {break}
+      jobData.woodcutter = parseInt(jobData.woodcutter) + 1
+      workerData.workers = parseInt(workerData.workers) - 1
+      updateFieldsByClass("job-woodcutter", jobData.woodcutter)
+      break
+    case "miner":
+      if (workerData.workers <= 0) {break}
+      jobData.miner = parseInt(jobData.miner) + 1
+      workerData.workers = parseInt(workerData.workers) - 1
+      updateFieldsByClass("job-miner", jobData.miner)
+      break
+  }
+  updateWorkerDisplays(workerData.workers)
+
+  console.log(`forager: ${jobData.forager}\nhunter: ${jobData.hunter}\nwoodcutter: ${jobData.woodcutter}\nminer: ${jobData.miner}`)
+}
+
+// jobs decrement buttons 
+function decJob(job) {
+  switch (job) {
+    case "forager":
+      if (jobData.forager <= 0) {break}
+      jobData.forager = parseInt(jobData.forager) - 1
+      workerData.workers = parseInt(workerData.workers) + 1
+      updateFieldsByClass("job-forager", jobData.forager)
+      break
+    case "hunter":
+      if (jobData.hunter <= 0) {break}
+      jobData.hunter = parseInt(jobData.hunter) - 1
+      workerData.workers = parseInt(workerData.workers) + 1
+      updateFieldsByClass("job-hunter", jobData.hunter)
+      break
+    case "woodcutter":
+      if (jobData.woodcutter <= 0) {break}
+      jobData.woodcutter = parseInt(jobData.woodcutter) - 1
+      workerData.workers = parseInt(workerData.workers) + 1
+      updateFieldsByClass("job-woodcutter", jobData.woodcutter)
+      break
+    case "miner":
+      if (jobData.miner <= 0) {break}
+      jobData.miner = parseInt(jobData.miner) - 1
+      workerData.workers = parseInt(workerData.workers) + 1
+      updateFieldsByClass("job-miner", jobData.miner)
+      break
+  }
+  updateWorkerDisplays(workerData.workers)
+  
+  console.log(`forager: ${jobData.forager}\nhunter: ${jobData.hunter}\nwoodcutter: ${jobData.woodcutter}\nminer: ${jobData.miner}`)
 }
 
 
@@ -318,8 +343,12 @@ function updateBasicInfoFields() {
   updateFieldsByClass("build-shack", buildData.shack)
   updateFieldsByClass("build-house", buildData.house)
   updateFieldsByClass("build-manor", buildData.manor)
-  
 
+  updateFieldsByClass("job-forager", jobData.forager)
+  updateFieldsByClass("job-hunter", jobData.hunter)
+  updateFieldsByClass("job-woodcutter", jobData.woodcutter)
+  updateFieldsByClass("job-miner", jobData.miner)
+  
 }
 
 // update fields to display game state from logs element

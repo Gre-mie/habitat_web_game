@@ -107,7 +107,53 @@
         <p>Resources available, <span>wood: <span class="available-wood"></span> stone: <span class="available-stone"></span></p>
 
       </div>
+      
+      <div id="info-jobs"
+        class="section"
+        data-forager=0
+        data-hunter=0
+        data-woodcutter=0
+        data-miner=0
+      >
+        <h3>Jobs:</h3>
+        <table>
+          <tr>
+            <td>
+              <button class="inc-dec dec" onclick="decJob('forager')">-</button>
+              <span class="job-forager"></span>
+              <button class="inc-dec inc" onclick="incJob('forager')">+</button>
+              <span>Forager</span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <button class="inc-dec dec" onclick="decJob('hunter')">-</button>
+              <span class="job-hunter"></span>
+              <button class="inc-dec inc" onclick="incJob('hunter')">+</button>
+              <span>Hunter</span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <button class="inc-dec dec" onclick="decJob('woodcutter')">-</button>
+              <span class="job-woodcutter"></span>
+              <button class="inc-dec inc" onclick="incJob('woodcutter')">+</button>
+              <span>Woodcutter</span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <button class="inc-dec dec" onclick="decJob('miner')">-</button>
+              <span class="job-miner"></span>
+              <button class="inc-dec inc" onclick="incJob('miner')">+</button>
+              <span>miner</span>
+            </td>
 
+          </tr>
+
+        </table>
+
+      </div>
 
 
 
