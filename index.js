@@ -134,10 +134,11 @@ function update() {
   buildData.stonespent = 0
 
   // reset job vars
-  jobData.forager=0
-  jobData.hunter=0
-  jobData.woodcutter=0
-  jobData.miner=0
+  jobData.jobs = 0
+  jobData.forager = 0
+  jobData.hunter = 0
+  jobData.woodcutter = 0
+  jobData.miner = 0
   
 
   
@@ -275,28 +276,36 @@ function incJob(job) {
       if (workerData.workers <= 0) {break}
       jobData.forager = parseInt(jobData.forager) + 1
       workerData.workers = parseInt(workerData.workers) - 1
+      jobData.jobs = parseInt(jobData.jobs) + 1
       updateFieldsByClass("job-forager", jobData.forager)
       break
     case "hunter":
       if (workerData.workers <= 0) {break}
       jobData.hunter = parseInt(jobData.hunter) + 1
       workerData.workers = parseInt(workerData.workers) - 1
+      jobData.jobs = parseInt(jobData.jobs) + 1
+
       updateFieldsByClass("job-hunter", jobData.hunter)
       break
     case "woodcutter":
       if (workerData.workers <= 0) {break}
       jobData.woodcutter = parseInt(jobData.woodcutter) + 1
       workerData.workers = parseInt(workerData.workers) - 1
+      jobData.jobs = parseInt(jobData.jobs) + 1
+
       updateFieldsByClass("job-woodcutter", jobData.woodcutter)
       break
     case "miner":
       if (workerData.workers <= 0) {break}
       jobData.miner = parseInt(jobData.miner) + 1
       workerData.workers = parseInt(workerData.workers) - 1
+      jobData.jobs = parseInt(jobData.jobs) + 1
+
       updateFieldsByClass("job-miner", jobData.miner)
       break
   }
   updateWorkerDisplays(workerData.workers)
+  updateFieldsByClass("jobs-filled", jobData.jobs)
 }
 
 // jobs decrement buttons 
@@ -306,28 +315,33 @@ function decJob(job) {
       if (jobData.forager <= 0) {break}
       jobData.forager = parseInt(jobData.forager) - 1
       workerData.workers = parseInt(workerData.workers) + 1
+      jobData.jobs = parseInt(jobData.jobs) - 1
       updateFieldsByClass("job-forager", jobData.forager)
       break
     case "hunter":
       if (jobData.hunter <= 0) {break}
       jobData.hunter = parseInt(jobData.hunter) - 1
       workerData.workers = parseInt(workerData.workers) + 1
+      jobData.jobs = parseInt(jobData.jobs) - 1
       updateFieldsByClass("job-hunter", jobData.hunter)
       break
     case "woodcutter":
       if (jobData.woodcutter <= 0) {break}
       jobData.woodcutter = parseInt(jobData.woodcutter) - 1
       workerData.workers = parseInt(workerData.workers) + 1
+      jobData.jobs = parseInt(jobData.jobs) - 1
       updateFieldsByClass("job-woodcutter", jobData.woodcutter)
       break
     case "miner":
       if (jobData.miner <= 0) {break}
       jobData.miner = parseInt(jobData.miner) - 1
       workerData.workers = parseInt(workerData.workers) + 1
+      jobData.jobs = parseInt(jobData.jobs) - 1
       updateFieldsByClass("job-miner", jobData.miner)
       break
   }
   updateWorkerDisplays(workerData.workers)
+  updateFieldsByClass("jobs-filled", jobData.jobs)
 }
 
 // updates all elements with className to display data
@@ -355,6 +369,7 @@ function updateBasicInfoFields() {
   updateFieldsByClass("build-house", buildData.house)
   updateFieldsByClass("build-manor", buildData.manor)
 
+  updateFieldsByClass("jobs-filled", jobData.jobs)
   updateFieldsByClass("job-forager", jobData.forager)
   updateFieldsByClass("job-hunter", jobData.hunter)
   updateFieldsByClass("job-woodcutter", jobData.woodcutter)
