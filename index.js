@@ -25,6 +25,12 @@ let maxPopulation = 50
 let maxFrames = 25
 let workerDisplay = []
 
+
+// TEST: vvv
+
+// TEST: ^^^
+
+
 // initial game setup
 // INFO: this function should only be called once
 function setup() {
@@ -77,11 +83,6 @@ setup()
 function update() {
   boardData.frames++
 
-  // calculate and display workers
-  workerData.workers = calclulateWorkers()
-  updateWorkerDisplays(workerData.workers)
-
-
   // add buildings built
   // add to shelter
   let shackBuilt = parseInt(buildData.shack)*parseInt(buildData.shackshelter)
@@ -95,12 +96,6 @@ function update() {
   boardData.wood = parseInt(boardData.wood) - parseInt(buildData.woodspent)
   boardData.stone = parseInt(boardData.stone) - parseInt(buildData.stonespent)
 
-
-
-  // calcualte resources gained
-  // add resources
-  // log resources
-
   // calculate resources gained from jobs
   // add food gained
   let plantsGained = calculateResources(jobData.forager, jobData.plants, habitatData.plants)
@@ -109,8 +104,6 @@ function update() {
   logData.meat = meatGained
   logData.food = plantsGained + meatGained
   boardData.food = parseInt(boardData.food) + plantsGained + meatGained
-
-  console.log(logData.food, logData.meat, logData.forage) // 
   
   // add build materiels gained from jobs 
   let woodGained = calculateResources(jobData.woodcutter, jobData.wood, habitatData.wood)
@@ -120,8 +113,25 @@ function update() {
   boardData.wood = parseInt(boardData.wood) + woodGained
   boardData.stone = parseInt(boardData.stone) + stoneGained
 
+  // food consumption and deaths from starvation
+  consumeFood()
+
+  //calcualte death from sickness
+  //calculate death from oldage
+
+  // calculate births
+  // calculate children growing
+  // calculate adults becoming old
+
+  // calculate new sick ppl (dont include already sick)
+  // (total population - shelter) if ppl remaining > sick ppl, calculate the healthy unsheltered that become sick
+  
 
 
+
+  // calculate and display workers
+  workerData.workers = calclulateWorkers()
+  updateWorkerDisplays(workerData.workers)
 
   updateLogFields()
   
@@ -139,11 +149,104 @@ function update() {
   jobData.hunter = 0
   jobData.woodcutter = 0
   jobData.miner = 0
+
+  // reset population vars
+  //logData.sick = 0
+  //logData.born = 0
+  //logData.grew = 0
+
+  logData.deaths = 0
+  //logData.sickness = 0
+  logData.starvation = 0
+  //logData.oldage = 0
   
 
   
 
 }
+
+
+// calculates and sets food consumption and deaths from starvation
+function consumeFood() {
+  let starvation = 0
+  // calculate adult consumption
+  let adultEat = parseInt(boardData.adultconsumes)
+  let adultCitizens = parseInt(boardData.adults)
+  for (let i = 0; i < adultCitizens; i++) {
+
+    if (boardData.food >= adultEat) {
+      // consume food
+      boardData.food = parseInt(boardData.food) - adultEat
+    } else {
+      starvation++
+    }
+  }
+
+  // calculate child consumption
+  let childEat = parseInt(boardData.childconsumes)
+  let childCitizens = parseInt(boardData.children)
+  for (let i = 0; i < childCitizens; i++) {
+
+    if (boardData.food >= childEat) {
+      // consume food
+      boardData.food = parseInt(boardData.food) - childEat
+    } else {
+      starvation++
+    }
+  }
+
+  // calculate elderly consumption
+  let oldEat = parseInt(boardData.oldconsumes)
+  let oldCitizens = parseInt(boardData.old)
+  for (let i = 0; i < oldCitizens; i++) {
+
+    if (boardData.food >= oldEat) {
+      // consume food
+      boardData.food = parseInt(boardData.food) - oldEat
+    } else {
+      starvation++
+    }
+  }
+
+  // update and acton starvation deaths 
+  updateDeaths(starvation)
+  logData.starvation = starvation
+  logData.deaths = parseInt(logData.deaths) + starvation
+
+  // update display
+  updateFieldsByClass("info-children", boardData.children)
+  updateFieldsByClass("info-adults", boardData.adults)
+  updateFieldsByClass("info.old", boardData.old)
+
+  updateFieldsByClass("info-food", boardData.food)
+
+  updateFieldsByClass("log-starvation", logData.starvation)
+  updateFieldsByClass("log-deaths", logData.deaths)
+}
+
+// sets deaths by order: elderly -> children -> adults
+function updateDeaths(deaths) {
+  console.log(`deaths: ${deaths}`)
+  
+  for (let i = 0; i < deaths; i++) {
+    if (parseInt(boardData.old) > 0) {
+      boardData.old = parseInt(boardData.old) - 1
+
+    } else if (parseInt(boardData.children)) {
+      boardData.children = parseInt(boardData.children) - 1
+
+    } else if (parseInt(boardData.adults)) {
+      boardData.adults = parseInt(boardData.adults) - 1
+
+    }
+  }
+
+  console.log(`children: ${boardData.children}, adult: ${boardData.adults}, elderly: ${boardData.old}`)
+
+}
+
+
+
 
 // building increment buttons
 function incBuilding(building) {
@@ -389,6 +492,7 @@ function updateLogFields() {
   updateFieldsByClass("log-grew", logData.grew)
   updateFieldsByClass("log-deaths", logData.deaths)
   updateFieldsByClass("log-sickness", logData.sickness)
+  updateFieldsByClass("log-starvation", logData.starvation)
   updateFieldsByClass("log-oldage", logData.oldage)
 
   updateFieldsByClass("log-shelter", logData.shelter)
