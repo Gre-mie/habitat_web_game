@@ -1,4 +1,3 @@
-
 // get habitat variables
 let fullurl = window.location.href
 let params = new URLSearchParams(new URL(fullurl).search)
@@ -281,8 +280,6 @@ function incJob(job) {
       break
   }
   updateWorkerDisplays(workerData.workers)
-
-  console.log(`forager: ${jobData.forager}\nhunter: ${jobData.hunter}\nwoodcutter: ${jobData.woodcutter}\nminer: ${jobData.miner}`)
 }
 
 // jobs decrement buttons 
@@ -314,10 +311,7 @@ function decJob(job) {
       break
   }
   updateWorkerDisplays(workerData.workers)
-  
-  console.log(`forager: ${jobData.forager}\nhunter: ${jobData.hunter}\nwoodcutter: ${jobData.woodcutter}\nminer: ${jobData.miner}`)
 }
-
 
 // updates all elements with className to display data
 function updateFieldsByClass(className, data) {
@@ -348,7 +342,6 @@ function updateBasicInfoFields() {
   updateFieldsByClass("job-hunter", jobData.hunter)
   updateFieldsByClass("job-woodcutter", jobData.woodcutter)
   updateFieldsByClass("job-miner", jobData.miner)
-  
 }
 
 // update fields to display game state from logs element
@@ -372,7 +365,6 @@ function updateLogFields() {
   updateFieldsByClass("log-manor", buildData.manor)
   updateFieldsByClass("log-wood-spent", buildData.woodspent)
   updateFieldsByClass("log-stone-spent", buildData.stonespent)
-
 }
 
 // calculates number of workers 
@@ -396,6 +388,20 @@ function updateWorkerDisplays(workers) {
 
 function calculatePopulation() {
   return parseInt(boardData.children) + parseInt(boardData.adults) + parseInt(boardData.old)
+}
+
+// determine success/failior of a chance variable
+// INFO: a chance variable is a habitat variable and is considered to be the chance percentage of success out of 10
+// if chance is < random out of 10, condition is met (true)
+// chance 5 will have a 50% chance of success, due to 0-10 being calculated
+function determineSuccess(chance) {
+  let random = Math.floor(Math.random() * 10) + 1
+  if (!Number.isInteger(chance)) {console.log("%c WARNING:", "color:yellow", `Chance variable is: chance ${chance}, type: ${typeof chance}`)}
+
+  if (random <= chance) {
+    return true 
+  }
+  return false
 }
 
 
