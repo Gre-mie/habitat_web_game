@@ -25,14 +25,6 @@ let maxPopulation = 50
 let maxFrames = 25
 let workerDisplay = []
 
-
-// TEST: vvv
-boardData.wood = 60
-boardData.stone = 120
-// TEST: ^^^
-
-
-
 // initial game setup
 // INFO: this function should only be called once
 function setup() {
@@ -102,6 +94,31 @@ function update() {
   // remove resources
   boardData.wood = parseInt(boardData.wood) - parseInt(buildData.woodspent)
   boardData.stone = parseInt(boardData.stone) - parseInt(buildData.stonespent)
+
+
+
+  // calcualte resources gained
+  // add resources
+  // log resources
+
+  // calculate resources gained from jobs
+  // add food gained
+  let plantsGained = calculateResources(jobData.forager, jobData.plants, habitatData.plants)
+  logData.forage = plantsGained
+  let meatGained = calculateResources(jobData.hunter, jobData.meat, habitatData.meat)
+  logData.meat = meatGained
+  logData.food = plantsGained + meatGained
+  boardData.food = parseInt(boardData.food) + plantsGained + meatGained
+
+  console.log(logData.food, logData.meat, logData.forage) // 
+  
+  // add build materiels gained from jobs 
+  let woodGained = calculateResources(jobData.woodcutter, jobData.wood, habitatData.wood)
+  let stoneGained = calculateResources(jobData.miner, jobData.stone, habitatData.stone)
+  logData.wood = woodGained
+  logData.stone = stoneGained
+  boardData.wood = parseInt(boardData.wood) + woodGained
+  boardData.stone = parseInt(boardData.stone) + stoneGained
 
 
 
@@ -403,6 +420,26 @@ function determineSuccess(chance) {
   }
   return false
 }
+
+// calculate the number of resources successfully collected
+function calculateResources(workers, possibleResource, chance) {
+  workers = parseInt(workers)
+  possibleResource = parseInt(possibleResource)
+  chance = parseInt(chance)
+  
+  let resources = 0
+  for (i=0; i<workers; i++) {
+    if (determineSuccess(chance)) {
+      resources += possibleResource
+    }
+  }
+  return resources
+}
+
+
+
+
+
 
 
 
