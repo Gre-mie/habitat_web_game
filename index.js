@@ -27,7 +27,7 @@ let workerDisplay = []
 
 
 // TEST: vvv
-
+boardData.sick = 2
 // TEST: ^^^
 
 
@@ -116,16 +116,19 @@ function update() {
   // food consumption and deaths from starvation
   consumeFood()
 
-  //calcualte death from sickness
+  // determine how many citizens die from sickness or become healthy
+  deathFromSickness()
+
   //calculate death from oldage
+
+
 
   // calculate births
   // calculate children growing
   // calculate adults becoming old
 
-  // calculate new sick ppl (dont include already sick)
-  // (total population - shelter) if ppl remaining > sick ppl, calculate the healthy unsheltered that become sick
-  
+  // calculate new sick ppl (old sick ppl have already been handled)
+  // take shelter into account 
 
 
 
@@ -151,19 +154,44 @@ function update() {
   jobData.miner = 0
 
   // reset population vars
-  //logData.sick = 0
+  logData.sick = 0
   //logData.born = 0
   //logData.grew = 0
 
   logData.deaths = 0
-  //logData.sickness = 0
+  logData.sickness = 0
   logData.starvation = 0
   //logData.oldage = 0
-  
 
-  
 
 }
+
+// determins if a sick citizen dies or becomes healthy
+function deathFromSickness() {
+  let deathsBySickness = 0
+  let healthy = 0
+
+  let sickPeople = parseInt(boardData.sick)
+  for (let i = 0; i < sickPeople; i++) {
+  
+    let recoveryChance = 10 - parseInt(habitatData.sickness)
+    if (determineSuccess(recoveryChance)) {
+      healthy++
+    } else {
+      deathsBySickness++
+    }
+  }
+
+  // update healthy
+  boardData.sick = parseInt(boardData.sick) - healthy
+
+  // update deaths from sickness
+  updateDeaths(deathsBySickness)
+  boardData.sick = 0 // all the sick either die or get better
+  logData.deaths = parseInt(logData.deaths) + deathsBySickness
+  logData.sickness = deathsBySickness
+}
+
 
 
 // calculates and sets food consumption and deaths from starvation
@@ -181,7 +209,6 @@ function consumeFood() {
       starvation++
     }
   }
-
   // calculate child consumption
   let childEat = parseInt(boardData.childconsumes)
   let childCitizens = parseInt(boardData.children)
@@ -194,7 +221,6 @@ function consumeFood() {
       starvation++
     }
   }
-
   // calculate elderly consumption
   let oldEat = parseInt(boardData.oldconsumes)
   let oldCitizens = parseInt(boardData.old)
@@ -217,16 +243,14 @@ function consumeFood() {
   updateFieldsByClass("info-children", boardData.children)
   updateFieldsByClass("info-adults", boardData.adults)
   updateFieldsByClass("info.old", boardData.old)
-
   updateFieldsByClass("info-food", boardData.food)
-
-  updateFieldsByClass("log-starvation", logData.starvation)
-  updateFieldsByClass("log-deaths", logData.deaths)
 }
 
 // sets deaths by order: elderly -> children -> adults
 function updateDeaths(deaths) {
-  console.log(`deaths: ${deaths}`)
+  deaths = parseInt(deaths)
+
+  //console.log(`deaths: ${deaths}`)
   
   for (let i = 0; i < deaths; i++) {
     if (parseInt(boardData.old) > 0) {
@@ -462,6 +486,7 @@ function updateBasicInfoFields() {
   updateFieldsByClass("info-children", boardData.children)
   updateFieldsByClass("info-adults", boardData.adults)
   updateFieldsByClass("info-old", boardData.old)
+  updateFieldsByClass("info-sick", boardData.sick)
   updateFieldsByClass("info-food", boardData.food)
   updateFieldsByClass("info-wood", boardData.wood)
   updateFieldsByClass("info-stone", boardData.stone)
@@ -554,10 +579,6 @@ function calculateResources(workers, possibleResource, chance) {
   }
   return resources
 }
-
-
-
-
 
 
 
