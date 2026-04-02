@@ -27,7 +27,9 @@ let workerDisplay = []
 
 
 // TEST: vvv
-boardData.sick = 2
+boardData.food = 100
+boardData.children = 5
+boardData.old = 10
 // TEST: ^^^
 
 
@@ -119,8 +121,8 @@ function update() {
   // determine how many citizens die from sickness or become healthy
   deathFromSickness()
 
-  //calculate death from oldage
-
+  // determine how many old people die from old age
+  deathFromOldage()
 
 
   // calculate births
@@ -166,6 +168,35 @@ function update() {
 
 }
 
+// determines the number of old citizens that die from old age
+function deathFromOldage() {
+  let oldage = 0
+  let oldageChance = parseInt(habitatData.oldage)
+
+  console.log(`oldPeople: ${boardData.old}, `)
+
+  let oldPeople = parseInt(boardData.old)
+  for (let i = 0; i < oldPeople; i++) {
+
+    let success = determineSuccess(oldageChance) //
+
+    console.log(`${i+1}. dies: ${success}`) //
+    if (success) {oldage++}
+
+  }
+
+  // set variables
+  console.log(`deaths: ${oldage}`)
+  updateDeaths(oldage)
+  
+  //boardData.old = parseInt(boardData.old) - oldage
+  logData.deaths = parseInt(logData.deaths) + oldage
+  logData.oldage = oldage
+
+}
+
+
+
 // determins if a sick citizen dies or becomes healthy
 function deathFromSickness() {
   let deathsBySickness = 0
@@ -191,7 +222,6 @@ function deathFromSickness() {
   logData.deaths = parseInt(logData.deaths) + deathsBySickness
   logData.sickness = deathsBySickness
 }
-
 
 
 // calculates and sets food consumption and deaths from starvation
@@ -246,12 +276,11 @@ function consumeFood() {
   updateFieldsByClass("info-food", boardData.food)
 }
 
+
 // sets deaths by order: elderly -> children -> adults
 function updateDeaths(deaths) {
   deaths = parseInt(deaths)
 
-  //console.log(`deaths: ${deaths}`)
-  
   for (let i = 0; i < deaths; i++) {
     if (parseInt(boardData.old) > 0) {
       boardData.old = parseInt(boardData.old) - 1
@@ -266,10 +295,7 @@ function updateDeaths(deaths) {
   }
 
   console.log(`children: ${boardData.children}, adult: ${boardData.adults}, elderly: ${boardData.old}`)
-
 }
-
-
 
 
 // building increment buttons
@@ -338,8 +364,8 @@ function incBuilding(building) {
   updateFieldsByClass("info-builders", buildData.builders)
   updateFieldsByClass("available-wood", parseInt(boardData.wood) - parseInt(buildData.woodspent))
   updateFieldsByClass("available-stone", parseInt(boardData.stone) - parseInt(buildData.stonespent))
-
 }
+
 
 // building decrement buttons 
 function decBuilding(building) {
@@ -396,6 +422,7 @@ function decBuilding(building) {
   updateFieldsByClass("available-stone", parseInt(boardData.stone) - parseInt(buildData.stonespent))
 }
 
+
 // jobs increment buttons 
 function incJob(job) {
   switch (job) {
@@ -435,6 +462,7 @@ function incJob(job) {
   updateFieldsByClass("jobs-filled", jobData.jobs)
 }
 
+
 // jobs decrement buttons 
 function decJob(job) {
   switch (job) {
@@ -471,6 +499,7 @@ function decJob(job) {
   updateFieldsByClass("jobs-filled", jobData.jobs)
 }
 
+
 // updates all elements with className to display data
 function updateFieldsByClass(className, data) {
   let fields = document.getElementsByClassName(className)
@@ -478,6 +507,7 @@ function updateFieldsByClass(className, data) {
     fields[i].innerText = data
   }
 }
+
 
 // update fields to display game state from board element
 function updateBasicInfoFields() {
@@ -504,6 +534,7 @@ function updateBasicInfoFields() {
   updateFieldsByClass("job-miner", jobData.miner)
 }
 
+
 // update fields to display game state from logs element
 function updateLogFields() {
   updateFieldsByClass("log-food", logData.food)
@@ -528,6 +559,7 @@ function updateLogFields() {
   updateFieldsByClass("log-stone-spent", buildData.stonespent)
 }
 
+
 // calculates number of workers 
 function calclulateWorkers() {
   let workers = parseInt(boardData.adults)
@@ -541,15 +573,18 @@ function calclulateWorkers() {
   return workers
 }
 
+
 // updates worker display elements
 function updateWorkerDisplays(workers) {
   workerEl.innerText = workers
   workerDisplayEl.textContent = workerDisplay.slice(0, workers).join("")
 }
 
+
 function calculatePopulation() {
   return parseInt(boardData.children) + parseInt(boardData.adults) + parseInt(boardData.old)
 }
+
 
 // determine success/failior of a chance variable
 // INFO: a chance variable is a habitat variable and is considered to be the chance percentage of success out of 10
@@ -565,6 +600,7 @@ function determineSuccess(chance) {
   return false
 }
 
+
 // calculate the number of resources successfully collected
 function calculateResources(workers, possibleResource, chance) {
   workers = parseInt(workers)
@@ -579,8 +615,6 @@ function calculateResources(workers, possibleResource, chance) {
   }
   return resources
 }
-
-
 
 
 // this function will be called by the "continue" button
@@ -612,7 +646,4 @@ function evaluateYear() {
   document.getElementById("bookmark-log").scrollIntoView()
 
 }
-
-
-// TEST:
 
