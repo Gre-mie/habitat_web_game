@@ -123,10 +123,11 @@ function update() {
   deathFromSickness()
   // calculate children growing
   childrenGrow()
-  // calculate births
-  reproduction()
   // determine how many old people die from old age
   deathFromOldage()
+  // calculate births
+  reproduction()
+  
 
   // calculate adults becoming old
 
