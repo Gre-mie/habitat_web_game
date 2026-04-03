@@ -28,6 +28,7 @@ let workerDisplay = []
 
 // TEST: vvv
 boardData.food = 1000
+boardData.sick = 25
 
 boardData.children = 10
 boardData.adults = 10
@@ -597,10 +598,10 @@ function updateLogFields() {
 function calclulateWorkers() {
   let workers = parseInt(boardData.adults)
   let notWorkers = parseInt(boardData.children) + parseInt(boardData.old)
-  let sick = parseInt(logData.sick)
+  let sickWorkers = parseInt(boardData.sick) - notWorkers
 
-  if (sick > notWorkers) {
-    workers -= sick
+  if (sickWorkers > 0) {
+    workers -= sickWorkers
   }
   if (workers < 0) {workers = 0}
   return workers
@@ -654,6 +655,12 @@ function calculateResources(workers, possibleResource, chance) {
 function evaluateYear() {
   // this function is where most of the logic should be 
   update()
+
+  // display resources available
+  updateFieldsByClass("available-wood", parseInt(boardData.wood) - parseInt(buildData.woodspent))
+  updateFieldsByClass("available-stone", parseInt(boardData.stone) - parseInt(buildData.stonespent))
+
+
 
 
   console.log("evaluating Year...") // TEST:
