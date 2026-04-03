@@ -1,3 +1,8 @@
+// This project was created to explore what it would be like saveing
+// most of a games state data onto HTML elements rather than using 
+// objects.
+// I dont recomend this way of doing things in any serious way.
+
 // get habitat variables
 let fullurl = window.location.href
 let params = new URLSearchParams(new URL(fullurl).search)
@@ -21,18 +26,15 @@ let buildData = buildEl.dataset
 let jobData = jobEl.dataset
 
 // other game variables
-let maxPopulation = 50
-let maxFrames = 25
+let maxPopulation = 50 // win condition
+let maxFrames = 25     // win condition
 let workerDisplay = []
 
 
 // TEST: vvv
-boardData.food = 1000
-boardData.sick = 25
 
-boardData.children = 10
-boardData.adults = 10
-boardData.old = 10
+
+
 // TEST: ^^^
 
 
@@ -104,6 +106,9 @@ function update() {
   // calculate resources gained from jobs
   // add food gained
   let plantsGained = calculateResources(jobData.forager, jobData.plants, habitatData.plants)
+  // special possiblity for double resources on foraging
+  // INFO: THIS GETS A LITTLE CRAZY... but in a fun way
+  if (determineSuccess(5)) {plantsGained = plantsGained * 2}
   logData.forage = plantsGained
   let meatGained = calculateResources(jobData.hunter, jobData.meat, habitatData.meat)
   logData.meat = meatGained
@@ -122,20 +127,21 @@ function update() {
   consumeFood()
   // determine how many citizens die from sickness or become healthy
   deathFromSickness()
-  // calculate children growing
-  childrenGrow()
   // determine how many old people die from old age
   deathFromOldage()
+  // calculate adults becoming old
+  adultsAge()
+  // calculate children growing
+  childrenGrow()
   // calculate births
   reproduction()
   
-
-  // calculate adults becoming old
-
-
  
+  // INFO: my need moving ?
   // calculate new sick ppl (old sick ppl have already been handled)
-  // take shelter into account 
+  // take shelter into account
+  gottenSick()
+  
 
 
 
@@ -161,15 +167,46 @@ function update() {
   jobData.miner = 0
 
   // reset population vars
-  logData.sick = 0
-  //logData.born = 0
-  //logData.grew = 0
-
   logData.deaths = 0
-  logData.sickness = 0
-  logData.starvation = 0
-  //logData.oldage = 0
+}
 
+
+// calculates who becomes sick, takes shelter into account
+function gottenSick() {
+  let sick = 0
+  let sickness = parseInt(habitatData.sickness)
+  
+  let population = calculatePopulation()
+  let shelter = parseInt(boardData.shelter)
+  let unsheltered = population - shelter
+  for (let i = 0; i < unsheltered; i++) {
+    if (determineSuccess(sickness)) {sick++}
+  }
+
+  console.log(`pop: ${population}, shelter: ${shelter}
+unsheltered: ${unsheltered}
+new sick: ${sick}`)
+
+  // set variables
+  boardData.sick = sick
+  logData.sick = sick
+}
+
+
+// determine how many adults become old
+ function adultsAge() {
+  let aged = 0
+  let ageChance = parseInt(habitatData.grow)
+
+  let adults = parseInt(boardData.adults) 
+  for (let i = 0; i < adults; i++) { 
+    if (determineSuccess(ageChance)) {aged++}
+  }
+  
+  // set variables
+  boardData.adults = parseInt(boardData.adults) - aged
+  boardData.old = parseInt(boardData.old) + aged
+  logData.aged = aged
 
 }
 
@@ -194,16 +231,30 @@ function childrenGrow() {
 
 
 // determine number of offspring from unasigned workers
-// INFO: shelter doesn't affect reproduction, breeders are happy campers
+// shelter increases chance of success
+// game was to difficult with pairs of breeders, so now their all asexual
 function reproduction() {
   let births = 0
   let unassigned = parseInt(workerData.workers)
   let fertility = parseInt(habitatData.fertility)
+  let shelter = parseInt(boardData.shelter)
 
   let pairs = 0
-  while (pairs < Math.floor(unassigned/2)) {
+  while (pairs < unassigned) { // Math.floor(unassigned/2)) {
     pairs++
-    if (determineSuccess(fertility)) {births++}
+    if (shelter >= 2) {
+      let improvedFertility = fertility + 2
+      if (improvedFertility > 10) {
+        improvedFertility = 10
+      }
+        // chance of twins
+        if (determineSuccess(improvedFertility)) {births++}
+        if (determineSuccess(improvedFertility)) {births++}
+        shelter -= 3 // 2 adults and one child
+
+    } else {
+      if (determineSuccess(fertility)) {births++}
+    }
   }
 
   // set variables
@@ -580,6 +631,7 @@ function updateLogFields() {
   updateFieldsByClass("log-sick", logData.sick)
   updateFieldsByClass("log-born", logData.born)
   updateFieldsByClass("log-grew", logData.grew)
+  updateFieldsByClass("log-aged", logData.aged)
   updateFieldsByClass("log-deaths", logData.deaths)
   updateFieldsByClass("log-sickness", logData.sickness)
   updateFieldsByClass("log-starvation", logData.starvation)
