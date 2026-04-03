@@ -28,7 +28,8 @@ let workerDisplay = []
 
 // TEST: vvv
 boardData.food = 100
-boardData.children = 5
+
+boardData.adults = 10
 boardData.old = 10
 // TEST: ^^^
 
@@ -117,15 +118,14 @@ function update() {
 
   // food consumption and deaths from starvation
   consumeFood()
-
   // determine how many citizens die from sickness or become healthy
   deathFromSickness()
-
   // determine how many old people die from old age
   deathFromOldage()
 
-
   // calculate births
+  reproduction()
+
   // calculate children growing
   // calculate adults becoming old
 
@@ -168,33 +168,43 @@ function update() {
 
 }
 
+
+// determine number of offspring from unasigned workers
+// INFO: shelter doesn't affect reproduction, breeders are happy campers
+function reproduction() {
+  let births = 0
+  let unassigned = parseInt(workerData.workers)
+  let fertility = parseInt(habitatData.fertility)
+
+  let pairs = 0
+  while (pairs < Math.floor(unassigned/2)) {
+    pairs++
+    if (determineSuccess(fertility)) {births++}
+  }
+
+  // set variables
+  boardData.children = parseInt(boardData.children) + births
+  logData.born = births
+}
+
+
 // determines the number of old citizens that die from old age
 function deathFromOldage() {
   let oldage = 0
   let oldageChance = parseInt(habitatData.oldage)
 
-  console.log(`oldPeople: ${boardData.old}, `)
-
   let oldPeople = parseInt(boardData.old)
   for (let i = 0; i < oldPeople; i++) {
-
-    let success = determineSuccess(oldageChance) //
-
-    console.log(`${i+1}. dies: ${success}`) //
-    if (success) {oldage++}
-
+    if (determineSuccess(oldageChance)) {oldage++}
   }
 
   // set variables
-  console.log(`deaths: ${oldage}`)
   updateDeaths(oldage)
   
   //boardData.old = parseInt(boardData.old) - oldage
   logData.deaths = parseInt(logData.deaths) + oldage
   logData.oldage = oldage
-
 }
-
 
 
 // determins if a sick citizen dies or becomes healthy
