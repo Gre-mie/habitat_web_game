@@ -27,8 +27,9 @@ let workerDisplay = []
 
 
 // TEST: vvv
-boardData.food = 100
+boardData.food = 1000
 
+boardData.children = 10
 boardData.adults = 10
 boardData.old = 10
 // TEST: ^^^
@@ -120,15 +121,17 @@ function update() {
   consumeFood()
   // determine how many citizens die from sickness or become healthy
   deathFromSickness()
+  // calculate children growing
+  childrenGrow()
+  // calculate births
+  reproduction()
   // determine how many old people die from old age
   deathFromOldage()
 
-  // calculate births
-  reproduction()
-
-  // calculate children growing
   // calculate adults becoming old
 
+
+ 
   // calculate new sick ppl (old sick ppl have already been handled)
   // take shelter into account 
 
@@ -166,6 +169,25 @@ function update() {
   //logData.oldage = 0
 
 
+}
+
+
+// determine how many children grow into adults
+// chance is increased by the number of elderly
+function childrenGrow() {
+  let grow = 0
+  let growChance = parseInt(habitatData.grow) + parseInt(boardData.old)
+  if (growChance > 10) {growChance = 10}
+
+  let children = parseInt(boardData.children)
+  for (let i = 0; i < children; i++) {
+    if (determineSuccess(growChance)) {grow++}
+  }
+
+  // set variables
+  boardData.adults = parseInt(boardData.adults) + grow
+  boardData.children = parseInt(boardData.children) - grow
+  logData.grew = grow
 }
 
 
