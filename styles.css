@@ -61,10 +61,8 @@ h1, h2 {
   gap: 10px;
 }
 
-#habitats a {
+a {
   box-sizing: border-box;
-  min-width: 100px;
-  min-height: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -72,6 +70,8 @@ h1, h2 {
   font-size: 16px;
   text-decoration: none;
   color: var(--text);
+  background: var(--board-background);
+  border-color: var(--board-border);
   border-style: solid;
   border-width: var(--border-width);
   border-radius: 10px;
@@ -113,6 +113,8 @@ ul {
 .swamp {
   background: var(--main-swamp);
   border-color: var(--border-swamp);
+  min-width: 100px;
+  min-height: 100px;
 }
 
 .mountain {
@@ -128,6 +130,17 @@ ul {
 .forest {
   background: var(--main-forest);
   border-color: var(--border-forest);
+}
+
+#habitats a {
+  min-width: 100px;
+  min-height: 100px;
+}
+
+.button {
+  padding: 0.5rem 1.5rem;
+  font-weight: bold;
+  font-size: 18px;
 }
 
 .section {

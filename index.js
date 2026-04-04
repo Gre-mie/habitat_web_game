@@ -12,7 +12,7 @@ let habitatData = Object.fromEntries(params)
 // url to the endscreen with all its information
 
 let endGameURL = "endgame.html?"
-let endGameHabitat= `` // habitat information is appended
+let endGameHabitat= `${habitatData.name},${habitatData.meat},${habitatData.plants},${habitatData.wood},${habitatData.stone},${habitatData.grow},${habitatData.oldage},${habitatData.fertility},${habitatData.sickness}` // habitat information is appended
 // habitat data structure, [name, meat, plants, wood, stone, grow, oldage, fertility, sickness]
 let endGameStatus = "" // end condition status is appended
 let endGameHistory = "" // yearly information is appended 
@@ -45,7 +45,9 @@ let workerDisplay = []
 
 // TEST: vvv
 
-boardData.adults = 1
+boardData.food = 0
+boardData.adults = 0
+boardData.old = 1
 
 // TEST: ^^^
 
@@ -732,7 +734,7 @@ function evaluateYear() {
   if (population >= maxPopulation) {
     console.log("Win condition met") // TEST: 
 
-    endScreen("win", "population")
+    endScreenSetup("win", "population")
 
   }
 
@@ -740,7 +742,7 @@ function evaluateYear() {
   if (boardData.frames >= maxFrames) {
     console.log("Win condition met") // TEST: 
 
-    endScreen("win", "frames")
+    endScreenSetup("win", "frames")
 
   }
 
@@ -749,7 +751,7 @@ function evaluateYear() {
   if (population <= 0) {
     console.log("Loose condition met") // TEST: 
 
-    endScreen("loose", "population")
+    endScreenSetup("loose", "population")
 
 
   }
@@ -763,7 +765,7 @@ function evaluateYear() {
 }
 
 // responsible for handling the end screen setup 
-function endScreen(status, condition) {
+function endScreenSetup(status, condition) {
   redirectToEnd(status, condition)
 
   // display info to screen
@@ -788,5 +790,11 @@ status:  ${endGameStatus}
 history: ${endGameHistory}`)
 
   console.log(`redirect to: ${url}`)
+
+  window.location.replace(url)
+
+
 }
+
+
 
