@@ -8,6 +8,18 @@ let fullurl = window.location.href
 let params = new URLSearchParams(new URL(fullurl).search)
 let habitatData = Object.fromEntries(params)
 
+// INFO: these three parts are concatinated to form the entire
+// url to the endscreen with all its information
+
+let endGameURL = "endgame.html?"
+let endGameHabitat= `` // habitat information is appended
+// habitat data structure, [name, meat, plants, wood, stone, grow, oldage, fertility, sickness]
+let endGameStatus = "" // end condition status is appended
+let endGameHistory = "" // yearly information is appended 
+// each year starts with 'y' followed by commer sepperated list of numbers
+// format example: y2,5,8,3,5y4,3,6,2,4
+// to pull information split by 'y' into an array of years, then each by ',' to get data 
+
 console.log(habitatData)
 
 // window elements
@@ -33,7 +45,7 @@ let workerDisplay = []
 
 // TEST: vvv
 
-
+boardData.adults = 1
 
 // TEST: ^^^
 
@@ -182,10 +194,6 @@ function gottenSick() {
   for (let i = 0; i < unsheltered; i++) {
     if (determineSuccess(sickness)) {sick++}
   }
-
-  console.log(`pop: ${population}, shelter: ${shelter}
-unsheltered: ${unsheltered}
-new sick: ${sick}`)
 
   // set variables
   boardData.sick = sick
@@ -721,21 +729,64 @@ function evaluateYear() {
   let population = calculatePopulation()
 
 // TODO: DISPLAY END GAME STATUS (WIN) BUTTON TO GO BACK TO index.html
-  if (population >= maxPopulation || boardData.frames >= maxFrames) {
+  if (population >= maxPopulation) {
     console.log("Win condition met") // TEST: 
+
+    endScreen("win", "population")
+
   }
+
+// TODO: DISPLAY END GAME STATUS (WIN) BUTTON TO GO BACK TO index.html
+  if (boardData.frames >= maxFrames) {
+    console.log("Win condition met") // TEST: 
+
+    endScreen("win", "frames")
+
+  }
+
 
 // TODO: DISPLAY END GAME STATUS (LOOSE) BUTTON TO GO BACK TO index.html
   if (population <= 0) {
-    console.log("Loose condition met")
+    console.log("Loose condition met") // TEST: 
+
+    endScreen("loose", "population")
+
+
   }
 
   // display info and logs
   updateBasicInfoFields()
 
- 
   // jump to the logs on html page  
   document.getElementById("bookmark-log").scrollIntoView()
 
+}
+
+// responsible for handling the end screen setup 
+function endScreen(status, condition) {
+  redirectToEnd(status, condition)
+
+  // display info to screen
+  // win - you servived the <habitat name>
+  // loose - you were defeated by the <habitat name>
+  // reason
+
+  // habitat data in logs 
+  
+  // split up year info
+  // append year info to history log
+
+}
+
+
+// page redirect to end screen
+function redirectToEnd(status, condition) {
+  let url = endGameURL + endGameHabitat + endGameStatus + endGameHistory
+  console.log(`url:     ${endGameURL}
+habitat: ${endGameHabitat}
+status:  ${endGameStatus}
+history: ${endGameHistory}`)
+
+  console.log(`redirect to: ${url}`)
 }
 
