@@ -1,26 +1,12 @@
-// This project was created to explore what it would be like saveing
+// This project was created to explore what it'd be like saveing
 // most of a games state data onto HTML elements rather than using 
 // objects.
-// I dont recomend this way of doing things in any serious way.
+// I dont recomend this way of doing things.
 
 // get habitat variables
 let fullurl = window.location.href
 let params = new URLSearchParams(new URL(fullurl).search)
 let habitatData = Object.fromEntries(params)
-
-// INFO: these three parts are concatinated to form the entire
-// url to the endscreen with all its information
-
-let endGameURL = "endgame.html?"
-let endGameHabitat= `${habitatData.name},${habitatData.meat},${habitatData.plants},${habitatData.wood},${habitatData.stone},${habitatData.grow},${habitatData.oldage},${habitatData.fertility},${habitatData.sickness}` // habitat information is appended
-// habitat data structure, [name, meat, plants, wood, stone, grow, oldage, fertility, sickness]
-let endGameStatus = "" // end condition status is appended
-let endGameHistory = "" // yearly information is appended 
-// each year starts with 'y' followed by commer sepperated list of numbers
-// format example: y2,5,8,3,5y4,3,6,2,4
-// to pull information split by 'y' into an array of years, then each by ',' to get data 
-
-console.log(habitatData)
 
 // window elements
 let boardEl = document.getElementById("board")
@@ -722,17 +708,11 @@ function evaluateYear() {
   updateFieldsByClass("available-wood", parseInt(boardData.wood) - parseInt(buildData.woodspent))
   updateFieldsByClass("available-stone", parseInt(boardData.stone) - parseInt(buildData.stonespent))
 
-
-
-
-  console.log("evaluating Year...") // TEST:
-
-// do these last
   let population = calculatePopulation()
 
-// TODO: DISPLAY END GAME STATUS (WIN) BUTTON TO GO BACK TO index.html
+  // win condition 
   if (population >= maxPopulation) {
-    console.log("Win condition met") // TEST: 
+    console.log("Win condition met") // TEST:  
 
     endScreenSetup("win", "population")
 
@@ -764,37 +744,8 @@ function evaluateYear() {
 
 }
 
-// responsible for handling the end screen setup 
 function endScreenSetup(status, condition) {
-  redirectToEnd(status, condition)
-
-  // display info to screen
-  // win - you servived the <habitat name>
-  // loose - you were defeated by the <habitat name>
-  // reason
-
-  // habitat data in logs 
+  console.log(`status: ${status}, condition: ${condition}`)
   
-  // split up year info
-  // append year info to history log
-
+  console.log(`el: ${document.getElementById("endgame-status")}`)
 }
-
-
-// page redirect to end screen
-function redirectToEnd(status, condition) {
-  let url = endGameURL + endGameHabitat + endGameStatus + endGameHistory
-  console.log(`url:     ${endGameURL}
-habitat: ${endGameHabitat}
-status:  ${endGameStatus}
-history: ${endGameHistory}`)
-
-  console.log(`redirect to: ${url}`)
-
-  window.location.replace(url)
-
-
-}
-
-
-

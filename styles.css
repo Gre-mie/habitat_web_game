@@ -112,9 +112,7 @@ ul {
 
 .swamp {
   background: var(--main-swamp);
-  border-color: var(--border-swamp);
-  min-width: 100px;
-  min-height: 100px;
+  border-color: var(--border-swamp); 
 }
 
 .mountain {
@@ -135,6 +133,10 @@ ul {
 #habitats a {
   min-width: 100px;
   min-height: 100px;
+}
+
+.button-anchor {
+  border: none;
 }
 
 .button {
