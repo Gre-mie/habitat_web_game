@@ -8,8 +8,6 @@ let fullurl = window.location.href
 let params = new URLSearchParams(new URL(fullurl).search)
 let habitatData = Object.fromEntries(params)
 
-console.log(habitatData)
-
 // window elements
 let boardEl = document.getElementById("board")
 let logEl = document.getElementById("log")
@@ -33,7 +31,9 @@ let workerDisplay = []
 
 // TEST: vvv
 
-
+boardData.old = 1
+boardData.adults = 0
+boardData.food = 0
 
 // TEST: ^^^
 
@@ -182,11 +182,6 @@ function gottenSick() {
   for (let i = 0; i < unsheltered; i++) {
     if (determineSuccess(sickness)) {sick++}
   }
-
-  console.log(`pop: ${population}, shelter: ${shelter}
-unsheltered: ${unsheltered}
-new sick: ${sick}`)
-
   // set variables
   boardData.sick = sick
   logData.sick = sick
@@ -202,12 +197,10 @@ new sick: ${sick}`)
   for (let i = 0; i < adults; i++) { 
     if (determineSuccess(ageChance)) {aged++}
   }
-  
   // set variables
   boardData.adults = parseInt(boardData.adults) - aged
   boardData.old = parseInt(boardData.old) + aged
   logData.aged = aged
-
 }
 
 
@@ -222,7 +215,6 @@ function childrenGrow() {
   for (let i = 0; i < children; i++) {
     if (determineSuccess(growChance)) {grow++}
   }
-
   // set variables
   boardData.adults = parseInt(boardData.adults) + grow
   boardData.children = parseInt(boardData.children) - grow
@@ -256,7 +248,6 @@ function reproduction() {
       if (determineSuccess(fertility)) {births++}
     }
   }
-
   // set variables
   boardData.children = parseInt(boardData.children) + births
   logData.born = births
@@ -272,7 +263,6 @@ function deathFromOldage() {
   for (let i = 0; i < oldPeople; i++) {
     if (determineSuccess(oldageChance)) {oldage++}
   }
-
   // set variables
   updateDeaths(oldage)
   
@@ -378,8 +368,6 @@ function updateDeaths(deaths) {
 
     }
   }
-
-  console.log(`children: ${boardData.children}, adult: ${boardData.adults}, elderly: ${boardData.old}`)
 }
 
 
@@ -714,28 +702,58 @@ function evaluateYear() {
 
 
 
-
-  console.log("evaluating Year...") // TEST:
-
-// do these last
+  // check end conditions
   let population = calculatePopulation()
 
-// TODO: DISPLAY END GAME STATUS (WIN) BUTTON TO GO BACK TO index.html
-  if (population >= maxPopulation || boardData.frames >= maxFrames) {
-    console.log("Win condition met") // TEST: 
+  if (boardData.frames >= maxFrames) {
+    let status = "Win"
+
+
+    window.location.assign(getEndscreenURL("win", "frames", ""))
+
+  }
+  if (population >= maxPopulation) {
+
+    window.location.assign(getEndscreenURL("win", "population"))
+
+    }
+
+  if (population <= 0) {
+
+   window.location.assign(getEndscreenURL("loose", "popuation"))
+
   }
 
-// TODO: DISPLAY END GAME STATUS (LOOSE) BUTTON TO GO BACK TO index.html
-  if (population <= 0) {
-    console.log("Loose condition met")
-  }
 
   // display info and logs
   updateBasicInfoFields()
-
- 
   // jump to the logs on html page  
   document.getElementById("bookmark-log").scrollIntoView()
+}
 
+
+// builds the endscreen url with variables
+// veribles are kept small in case of the URL having a charactor limit
+function getEndscreenURL(status, condition) {
+  let url = "endscreen.html"
+  let otherVars = `?hab=${habitatData.name[0]}`
+  // TODO: add other variable infromation, in list form
+  // year of death
+  // population
+  // resources
+
+  url += otherVars
+  if (status.length <= 0) {
+    return url
+  }
+  url += `&stat=${status[0]}`
+  
+  
+  if (condition.length <= 0) {
+    return url
+  }
+  url += `&cond=${condition[0]}`
+
+  return url 
 }
 
