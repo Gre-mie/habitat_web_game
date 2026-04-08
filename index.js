@@ -27,6 +27,7 @@ let jobData = jobEl.dataset
 let maxPopulation = 50 // win condition
 let maxFrames = 25     // win condition
 let workerDisplay = []
+let running = true
 
 
 // TEST: vvv
@@ -374,8 +375,6 @@ function updateDeaths(deaths) {
 
     }
   }
-
-  console.log(`children: ${boardData.children}, adult: ${boardData.adults}, elderly: ${boardData.old}`)
 }
 
 
@@ -712,40 +711,46 @@ function evaluateYear() {
 
   // win condition 
   if (population >= maxPopulation) {
-    console.log("Win condition met") // TEST:  
+    running = false
+    //console.log("Win condition met") // TEST: 
 
-    endScreenSetup("win", "population")
+    setEndscreenURL("win", "population") 
+
 
   }
 
 // TODO: DISPLAY END GAME STATUS (WIN) BUTTON TO GO BACK TO index.html
   if (boardData.frames >= maxFrames) {
-    console.log("Win condition met") // TEST: 
+    running = false
+    //console.log("Win condition met") // TEST: 
 
-    endScreenSetup("win", "frames")
+    setEndscreenURL("win", "frames") 
 
   }
 
 
 // TODO: DISPLAY END GAME STATUS (LOOSE) BUTTON TO GO BACK TO index.html
   if (population <= 0) {
-    console.log("Loose condition met") // TEST: 
+    running = false
+   // console.log("Loose condition met") // TEST: 
 
-    endScreenSetup("loose", "population")
+    setEndscreenURL("loose", "population") 
 
 
   }
 
-  // display info and logs
-  updateBasicInfoFields()
+  if (running) {
+    // display info and logs
+    updateBasicInfoFields()
 
-  // jump to the logs on html page  
-  document.getElementById("bookmark-log").scrollIntoView()
-
+    // jump to the logs on html page  
+    document.getElementById("bookmark-log").scrollIntoView()
+  }
 }
 
-function endScreenSetup(status, condition) {
-  console.log(`status: ${status}, condition: ${condition}`)
+function setEndscreenURL(status, condition) {
+  let endurl = `endgame.html?status=${status}&condition=${condition}`
+
   
-  console.log(`el: ${document.getElementById("endgame-status")}`)
+  console.log(document.getElementById("button-anchor"))
 }
