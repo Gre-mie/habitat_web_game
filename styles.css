@@ -160,6 +160,7 @@ ul {
   margin-top: 1rem;
 }
 
+
 .no-margin-bottom {
   margin-bottom: 0;
 }
@@ -209,6 +210,10 @@ ul {
 }
 #habitat-title h1 {
   margin: 0;
+}
+#habitat-title p {
+  margin-bottom: 0;
+  text-align: center;
 }
 #habitat-title span {
   text-align: center;

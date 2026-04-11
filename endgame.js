@@ -6,14 +6,14 @@ let endData = Object.fromEntries(params)
 
 // elements
 let infoEl = document.querySelector("#end-basic-info")
-let infoData = infoEl.dataset
+let logEl = document.querySelector("#log")
 
-console.log(endData) //
+// datasets
+let infoData = infoEl.dataset
+let logData = logEl.dataset
 
 transalteData(endData)
 updateElements(infoData)
-
-console.log(infoData) //
 
 
 // sets page data
@@ -29,7 +29,7 @@ function updateElements(infoData) {
     document.querySelector("hr").classList.add(habitat)
   }
 
-  // sets element text
+  // sets element text info
   document.getElementById("end-status").innerText += `You ${infoData.status}`
   document.querySelector("#end-condition").innerText = getConditionMessage(endData.stat, endData.cond)
   document.querySelector("#end-frames").innerText = `Year: ${infoData.frames}`
@@ -37,7 +37,14 @@ function updateElements(infoData) {
   document.querySelector("#end-food").innerText = `Food: ${infoData.food}`
   document.querySelector("#end-wood").innerText = `Wood: ${infoData.wood}`
   document.querySelector("#end-stone").innerText = `Stone: ${infoData.stone}`
-
+  // set elements text logs
+  document.querySelector(".log-food").innerText = logData.food
+  document.querySelector(".log-gather-meat").innerText = logData.meat
+  document.querySelector(".log-gather-forage").innerText = logData.forage
+  document.querySelector(".log-deaths").innerText = logData.deaths
+  document.querySelector(".log-sickness").innerText = logData.sickness
+  document.querySelector(".log-starvation").innerText = logData.starvation
+  document.querySelector(".log-oldage").innerText = logData.oldage
 }
 
 
@@ -79,6 +86,15 @@ function transalteData(data) {
   infoData.food = endData.food
   infoData.wood = endData.wood
   infoData.stone = endData.stone
+
+  // translate log data
+  logData.food = parseInt(endData.lmeat) + parseInt(endData.lforage)
+  logData.meat = endData.lmeat
+  logData.forage = endData.lforage
+  logData.deaths = endData.ldeaths
+  logData.sickness = endData.lsickness
+  logData.starvation = endData.lstarvation
+  logData.oldage = endData.loldage
 }
 
 
@@ -129,3 +145,4 @@ function updateHabitat(habitat) {
       break;
   }
 }
+

@@ -29,15 +29,6 @@ let maxFrames = 25     // win condition
 let workerDisplay = []
 
 
-// TEST: vvv
-
-boardData.old = 1
-boardData.adults = 0
-boardData.food = 0
-
-// TEST: ^^^
-
-
 // initial game setup
 // INFO: this function should only be called once
 function setup() {
@@ -753,7 +744,10 @@ function getEndscreenURL(status, condition) {
 
   // stats
   // fr=frames, pop=population
-  url += `&fr=${boardData.frames-1}&pop=${calculatePopulation()}&food=${boardData.food}&wood=${boardData.wood}&stone=${boardData.stone}`
+  url += `&fr=${boardData.frames}&pop=${calculatePopulation()}&food=${boardData.food}&wood=${boardData.wood}&stone=${boardData.stone}`
+
+  // summary of last years log
+  url += `&lmeat=${logData.meat}&lforage=${logData.forage}&ldeaths=${logData.deaths}&lsickness=${logData.sickness}&lstarvation=${logData.starvation}&loldage=${logData.oldage}`
 
   return url 
 }
