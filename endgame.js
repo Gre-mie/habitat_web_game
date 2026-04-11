@@ -26,14 +26,41 @@ function updateElements(infoData) {
   if (habitat.length > 0) {
     document.getElementById("end-status").classList.add(habitat)
     document.getElementById("new-game-button").classList.add(habitat)
+    document.querySelector("hr").classList.add(habitat)
   }
 
   // sets element text
   document.getElementById("end-status").innerText += `You ${infoData.status}`
+  document.querySelector("#end-condition").innerText = getConditionMessage(endData.stat, endData.cond)
+  document.querySelector("#end-frames").innerText = `Year: ${infoData.frames}`
+  document.querySelector("#end-population").innerText = `Population: ${infoData.population}`
+  document.querySelector("#end-food").innerText = `Food: ${infoData.food}`
+  document.querySelector("#end-wood").innerText = `Wood: ${infoData.wood}`
+  document.querySelector("#end-stone").innerText = `Stone: ${infoData.stone}`
+
+}
 
 
+function getConditionMessage(status, condition) {
+  if (status.length < 1 || condition.length < 1) {
+    console.log("%c WARNING: ", "color:yellow", `An input isn't set: status: ${status}, condition: ${condition}`)
+  }
 
+  if (status === "w") {
+    if (condition === "f") {
+      return `Your settelment survived ${infoData.frames} years and can now funciton on its own.
+Max years: ${endData.maxf}`
+    } else if (condition === "p")
+      return `Your settelment population reached max capacity and can now function on its own.
+Max capacity: ${endData.maxp}
+Population: ${infoData.population}`
+  } else if (status === "l") {
+    if (condition === "p") {
+      return `Your settlement survived ${infoData.frames} years before dieing out`
+    }
+  }
 
+  return ""
 }
 
 
@@ -43,31 +70,34 @@ function transalteData(data) {
   let endStatus = endData.stat
   let endCondition = endData.cond
 
-  // set and style elements
+  // update html element data
   updateHabitat(endhabitat)
   updateStatus(endStatus)
-
-  // check data
-
-
-
-  // populate variables with relevent data
-
-
-
-  console.log(`end Data:
-habitat: ${endhabitat}
-end status: ${endStatus}
-end condition met: ${endCondition}
-`)
-}
-
-function setConditionMessage(endStatus, condition) {
-  //
+  updateCondition(endCondition)
+  infoData.frames = endData.fr
+  infoData.population = endData.pop
+  infoData.food = endData.food
+  infoData.wood = endData.wood
+  infoData.stone = endData.stone
 }
 
 
-// sets the heading to the win/loose
+// updates html data condition
+function updateCondition(condition) {
+  switch (condition) {
+    case "p":
+      infoData.condition = "population"
+      break;
+    case "f":
+      infoData.condition = "frames"
+      break;
+    default:
+    console.log("%c WARNING:", "color:yellow", `endData has unrecognised condition: ${condition}`)
+  }
+}
+
+
+// updates the html data status
 function updateStatus(status) {
   switch (status) {
     case "w":
@@ -78,12 +108,11 @@ function updateStatus(status) {
     break;
     default:
       console.log("%c WARNING:", "color:yellow", `endData has unrecognised status: ${status}`)
-    break;
   }
 }
 
 
-// sets the style according to the habitat
+// updates html data habitat
 function updateHabitat(habitat) {
   switch (habitat) {
     case "S":
@@ -97,7 +126,6 @@ function updateHabitat(habitat) {
       break;
     case "F":
       infoData.habitat = "forest"
-
       break;
   }
 }

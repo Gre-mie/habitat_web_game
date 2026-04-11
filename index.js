@@ -707,21 +707,13 @@ function evaluateYear() {
 
   if (boardData.frames >= maxFrames) {
     let status = "Win"
-
-
-    window.location.assign(getEndscreenURL("win", "frames", ""))
-
+    window.location.assign(getEndscreenURL("win", "frames"))
   }
   if (population >= maxPopulation) {
-
     window.location.assign(getEndscreenURL("win", "population"))
-
     }
-
   if (population <= 0) {
-
    window.location.assign(getEndscreenURL("loose", "popuation"))
-
   }
 
 
@@ -748,11 +740,20 @@ function getEndscreenURL(status, condition) {
   }
   url += `&stat=${status[0]}`
   
-  
   if (condition.length <= 0) {
     return url
   }
   url += `&cond=${condition[0]}`
+
+  // other info
+  // maxf=max frames, maxp = max population
+  url += `&maxf=${maxFrames}&maxp=${maxPopulation}`
+  maxFrames
+  maxPopulation
+
+  // stats
+  // fr=frames, pop=population
+  url += `&fr=${boardData.frames-1}&pop=${calculatePopulation()}&food=${boardData.food}&wood=${boardData.wood}&stone=${boardData.stone}`
 
   return url 
 }
