@@ -1,25 +1,51 @@
 console.log(window.location.href)
 
-// pull varabiles
+// pull varabiles from URL
 let params = new URLSearchParams(new URL(window.location.href).search)
 let endData = Object.fromEntries(params)
 
+// elements
+let infoEl = document.querySelector("#end-basic-info")
+let infoData = infoEl.dataset
+
 console.log(endData) //
-transalteAndSetData(endData)
+
+transalteData(endData)
+updateElements(infoData)
+
+console.log(infoData) //
+
+
+// sets page data
+function updateElements(infoData) {
+  // styles elements with habitat colours
+  let habitat = infoData.habitat
+  if (habitat === "") {
+    console.log("%c WARNING:", "color:yellow", `endData has unrecognised habitat: ${habitat}`)
+  }
+  if (habitat.length > 0) {
+    document.getElementById("end-status").classList.add(habitat)
+    document.getElementById("new-game-button").classList.add(habitat)
+  }
+
+  // sets element text
+  document.getElementById("end-status").innerText += `You ${infoData.status}`
 
 
 
 
+}
 
-// translate and set data
-function transalteAndSetData(data) {
-  let habitat = endData.hab
+
+// updates html data with URL varibles
+function transalteData(data) {
+  let endhabitat = endData.hab
   let endStatus = endData.stat
   let endCondition = endData.cond
 
   // set and style elements
-  setHabitatStyle(habitat)
-  setStatusElement(endStatus)
+  updateHabitat(endhabitat)
+  updateStatus(endStatus)
 
   // check data
 
@@ -30,54 +56,48 @@ function transalteAndSetData(data) {
 
 
   console.log(`end Data:
-habitat: ${habitat}
+habitat: ${endhabitat}
 end status: ${endStatus}
 end condition met: ${endCondition}
 `)
 }
 
+function setConditionMessage(endStatus, condition) {
+  //
+}
+
 
 // sets the heading to the win/loose
-function setStatusElement(status) {
+function updateStatus(status) {
   switch (status) {
     case "w":
-      document.getElementById("end-status").innerText += " Won"
+      infoData.status = "Won"
     break;
     case "l":
-      document.getElementById("end-status").innerText += " Lost"
+      infoData.status = "Lost"
     break;
     default:
       console.log("%c WARNING:", "color:yellow", `endData has unrecognised status: ${status}`)
     break;
   }
-
-
-
 }
 
 
 // sets the style according to the habitat
-function setHabitatStyle(habitat) {
-  let style = ""
+function updateHabitat(habitat) {
   switch (habitat) {
     case "S":
-      style = "swamp"
+      infoData.habitat = "swamp"
       break;
     case "M": 
-      style = "mountain"
+      infoData.habitat = "mountain"
       break;
     case "D":
-      style = "desert"
+      infoData.habitat = "desert"
       break;
     case "F":
-      style = "forest"
+      infoData.habitat = "forest"
+
       break;
-  }
-  if (style === "") {
-    console.log("%c WARNING:", "color:yellow", `endData has unrecognised habitat: ${habitat}`)
-  }
-  if (style.length > 0) {
-    document.getElementById("end-status").classList.add(style)
-    document.getElementById("new-game-button").classList.add(style)
   }
 }
