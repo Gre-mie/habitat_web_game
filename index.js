@@ -338,7 +338,7 @@ function consumeFood() {
   // update display
   updateFieldsByClass("info-children", boardData.children)
   updateFieldsByClass("info-adults", boardData.adults)
-  updateFieldsByClass("info.old", boardData.old)
+  updateFieldsByClass("info-old", boardData.old)
   updateFieldsByClass("info-food", boardData.food)
 }
 
